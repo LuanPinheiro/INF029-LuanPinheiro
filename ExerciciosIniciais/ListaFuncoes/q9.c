@@ -1,4 +1,3 @@
-//INCOMPLETA
 #include <stdio.h>
 #include <string.h>>
 
@@ -18,22 +17,23 @@ dados_cliente cadastrarCliente();
 int validarNome(char validNome[20]);
 int validarCPF(char validCPF[11]);
 int validarSexo(char validSexo);
+int validarNascimento(int dia, int mes, int ano);
 
 int main() {
 
   dados_cliente cliente;
 
   cliente = cadastrarCliente();
-
+  
   if (cliente.errou == 1) {
     if (cliente.erroNome == 1)
       printf("\nErro na validação de nome\n");
-    if (cliente.erroSexo == 1)
-      printf("Erro na validação de sexo\n");
     if (cliente.erroCPF == 1)
       printf("Erro na validação de CPF\n");
     if (cliente.erroData == 1)
       printf("Erro na validação de data de nascimento\n");
+    if (cliente.erroSexo == 1)
+      printf("Erro na validação de sexo\n");
   } else {
     printf("\nCadastro Realizado com Sucesso\n");
     printf("\nNome do Cliente: %s\n", cliente.nome);
@@ -52,18 +52,19 @@ dados_cliente cadastrarCliente() {
 
   scanf("%s", clienteCAD.nome);
   scanf("%s", clienteCAD.cpf);
-  // scanf("%d", &clienteCAD.dataNasc[0]);
-  // scanf("%d", &clienteCAD.dataNasc[1]);
-  // scanf("%d", &clienteCAD.dataNasc[2]);
+  scanf("%d", &clienteCAD.dataNasc[0]);
+  scanf("%d", &clienteCAD.dataNasc[1]);
+  scanf("%d", &clienteCAD.dataNasc[2]);
   scanf("%s", &clienteCAD.sexo);
 
   // Validações
   clienteCAD.erroNome = validarNome(clienteCAD.nome);
   clienteCAD.erroCPF = validarCPF(clienteCAD.cpf);
   clienteCAD.erroSexo = validarSexo(clienteCAD.sexo);
+  clienteCAD.erroData = validarNascimento(clienteCAD.dataNasc[0], clienteCAD.dataNasc[1], clienteCAD.dataNasc[2]);
 
   if (clienteCAD.erroNome == 1 || clienteCAD.erroCPF == 1 ||
-      clienteCAD.erroSexo == 1)
+      clienteCAD.erroSexo == 1 || clienteCAD.erroData)
     clienteCAD.errou = 1;
   else
     clienteCAD.errou = 0;
@@ -99,4 +100,31 @@ int validarSexo(char validSexo) {
       return 0;
 
   return 1;
+}
+
+int validarNascimento(int dia, int mes, int ano){
+  if(dia > 31 || dia <= 0 || mes <=0 || mes > 12 || ano <= 0)
+    return 1;
+  else
+  {
+    if(mes != 2)
+    {
+      if(mes == 4 || mes == 6 || mes == 9 || mes == 11)
+        if(dia > 30)
+          return 1;
+    }
+    else
+    {
+      if(ano % 4 == 0 && ano % 100 !=0)
+      {
+        if(dia > 29)
+          return 1;
+      }
+      else
+        if(dia > 28)
+          return 1;
+    }
+  }
+
+  return 0;
 }
