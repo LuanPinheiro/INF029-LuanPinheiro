@@ -1,35 +1,60 @@
 #include <stdio.h>
 #include <string.h>
+#define tam 2
 
 typedef struct {
-  char nome[20];
-  long int cpf;
-  int dataNasc[3];
+  char nome[60];
+  char cpf[13];
+  char dataNasc[20];
   char sexo;
 } dados_cliente;
 
-void cadastrarCliente(dados_cliente cliente);
+void cadastrarCliente(dados_cliente cliente[]);
+void LimparString(char string[]);
 
 int main() {
 
-  dados_cliente cliente;
+  dados_cliente cliente[tam];
 
   cadastrarCliente(cliente);
 
-  printf("\nNome do Cliente: %s\n", cliente.nome);
-  printf("CPF do Cliente: %ld\n", cliente.cpf);
-  printf("Data de nascimento do Cliente: %d/%d/%d\n", cliente.dataNasc[0], cliente.dataNasc[1], cliente.dataNasc[2]);
-  printf("Sexo do Cliente: %c\n", cliente.sexo);
+  for(int i = 0; i<tam; i++)
+  {
+    printf("\nNome do Cliente: %s\n", cliente[i].nome);
+    printf("CPF do Cliente: %s\n", cliente[i].cpf);
+    printf("Data de nascimento do Cliente: %s\n", cliente[i].dataNasc);
+    printf("Sexo do Cliente: %c\n", cliente[i].sexo);
+  }
+  
 
   return 0;
 }
 
-void cadastrarCliente(dados_cliente cliente) {
+void cadastrarCliente(dados_cliente cliente[]) {
 
-  scanf("%s", cliente.nome);
-  scanf("%ld", &cliente.cpf);
-  scanf("%d", &cliente.dataNasc[0]);
-  scanf("%d", &cliente.dataNasc[1]);
-  scanf("%d", &cliente.dataNasc[2]);
-  scanf("%s", &cliente.sexo);
+  for(int x = 0; x<tam ; x++)
+  {
+    printf("Nome: ");
+    fgets(cliente[x].nome, 60, stdin);
+    LimparString(cliente[x].nome);
+
+    printf("CPF: ");
+    fgets(cliente[x].cpf, 13, stdin);
+    LimparString(cliente[x].cpf);
+    
+    printf("Data: ");
+    fgets(cliente[x].dataNasc, 20, stdin);
+    LimparString(cliente[x].dataNasc);
+    
+    printf("Sexo: ");
+    cliente[x].sexo = getchar();
+    getchar();
+  }
+  
+}
+
+void LimparString(char string[]){
+  for(int i=0;string[i] != '\0';i++)
+      if(string[i] == '\n')
+        string[i] = '\0';
 }

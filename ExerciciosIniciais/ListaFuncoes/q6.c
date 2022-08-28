@@ -1,23 +1,39 @@
 #include <stdio.h>
 
-void ler3letras(char l[3]);
+typedef struct{
+  char l1;
+  char l2;
+  char l3;
+}struct_letras;
+
+struct_letras ler3letras(struct_letras l);
 
 int main() {
 
-  char letras[3];
+  struct_letras letras;
 
-  ler3letras(letras);
+  letras = ler3letras(letras);
 
-  printf("%c", letras[0]);
-  printf("%c", letras[1]);
-  printf("%c", letras[2]);
+  printf("%c ", letras.l1);
+  printf("%c ", letras.l2);
+  printf("%c ", letras.l3);
   
   return 0;
 }
 
-void ler3letras(char l[3]){
+struct_letras ler3letras(struct_letras l){
+
+  printf("Letra 1: ");
+  l.l1 = getchar();
+  getchar();
   
-  scanf("%s", &l[0]);
-  scanf("%s", &l[1]);
-  scanf("%s", &l[2]);
+  printf("Letra 2: ");
+  l.l2 = getchar();
+  getchar();
+  
+  printf("Letra 3: ");
+  l.l3 = getchar();
+  getchar();
+
+  return l;
 }

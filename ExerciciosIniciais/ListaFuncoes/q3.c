@@ -32,8 +32,7 @@ long int fatorial(int x) {
   }
   
   for(i=x-1;i>0;i--)
-  {
     res *= i;
-  }
+  
   return res;
 }

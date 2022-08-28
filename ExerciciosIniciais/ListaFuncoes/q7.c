@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 void ler3palavras(char p1[16], char p2[16], char p3[16]);
+void LimparString(char string[]);
 
 int main() {
 
@@ -18,8 +19,22 @@ int main() {
 }
 
 void ler3palavras(char p1[16], char p2[16], char p3[16]){
+
+  printf("Palavra 1: ");
+  fgets(p1, 16, stdin);
+  LimparString(p1);
+
+  printf("Palavra 2: ");
+  fgets(p2, 16, stdin);
+  LimparString(p2);
   
-  scanf("%s", p1);
-  scanf("%s", p2);
-  scanf("%s", p3);
+  printf("Palavra 3: ");
+  fgets(p3, 16, stdin);
+  LimparString(p3);
 }
+
+void LimparString(char string[]){
+  for(int i=0;string[i] != '\0';i++)
+      if(string[i] == '\n')
+        string[i] = '\0';
+} 
