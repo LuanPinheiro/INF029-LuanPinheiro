@@ -93,12 +93,47 @@ int validarNome(char validNome[60]) {
 }
 
 int validarCPF(char validCPF[13]) {
-  int i;
-  for (i = 0; validCPF[i] != '\0'; i++)
+  int i, soma1 = 0, soma2 = 0;
+  int aux = 0;
+
+  //Checando se o CPF tem 11 digitos
+  for (i=0; validCPF[i]!='\0'; i++)
     if (i > 11)
       return 1;
-
   if (i < 11)
+    return 1;
+
+  //Checando se o CPF tem caracteres diferentes de numeros
+  for (i=0; validCPF[i]!='\0'; i++)
+    if ((validCPF[i] - 48) < 0 || (validCPF[i] - 48) > 9)
+      return 1;
+  
+  //Checando se o CPF tem todos os numeros iguais, aux servindo de check, se achar numero diferente sai do for
+  for(i=1;i!='\0';i++)
+    if (validCPF[i] != validCPF[0])
+    {
+      aux = 1;
+      break;
+    }
+  if (aux == 0)
+    return 1;
+
+  //Checando a validação do primeiro digito verificador, multiplicando os 9 primeiros numeros, decrescentemente por 10
+  for(i=0, aux=10; i<9; i++, aux--)
+    soma1 += (validCPF[i]-48) * aux;
+  
+  soma1 = (soma1 * 10) % 11;
+  
+  if(soma1 != (validCPF[9] - 48))
+    return 1;
+
+  //Checando a validação do segundo digito verificador, multiplicando os 10 numeros, decrescentemente por 11
+  for(i=0, aux=11; i<10; i++, aux--)
+    soma2 += (validCPF[i]-48) * aux;
+  
+  soma2 = (soma2 * 10) % 11;
+  
+  if(soma2 != (validCPF[10] - 48))
     return 1;
 
   return 0;
@@ -118,32 +153,24 @@ int validarSexo(char validSexo) {
 int validarNascimento(char validNasc[]) {
   int dia, mes, ano, i;
   int identificador = 0;
+  int aux, ano_atual = 2022;
   int str_count = 0;
 
-  // checando se a string é muito grande ou muito pequena
+  // Checando se a string de data é muito grande
   for(i=0;validNasc[i]!='\0';i++)
     str_count++;
 
-  if(str_count>10 || str_count<8)
+  if(str_count>10)
     return 1;
   
   str_count = 0;
   
-  // Iniciando validação
+  // Conversão de Dias e Mêses em inteiros
   for(i=0;validNasc[i]!='\0';i++)
-  {
-    if(str_count == 3 && identificador == 2)
-    {
-      if((validNasc[i-3] - 48) == 0)
-        return 1;
-      
-      ano = ((validNasc[i-3] - 48) * 1000) + ((validNasc[i-2] - 48) * 100) + ((validNasc[i-1] - 48) * 10) + (validNasc[i] - 48);
-      break;
-    }
-    
+  { 
     if(validNasc[i] == '/')
     {
-      if(str_count == 0)
+      if(str_count == 0 || str_count > 2)
         return 1;
       else 
         if(str_count == 2)
@@ -172,13 +199,28 @@ int validarNascimento(char validNasc[]) {
               mes = validNasc[i-1] - 48;
               identificador++;
             }
-      
       str_count = 0;
     }
     else
       str_count++;
   }
+  
+  //Conversão de Ano em Int
+  for (ano = 0; str_count > 0; str_count--)
+  {
+    aux = validNasc[i - str_count] - 48;
 
+    for (int x=0; x<str_count-1; x++)
+      aux *= 10;
+
+    ano += aux;
+  }
+
+  //Validação de Ano
+  if(ano <= 0 || ano > ano_atual)
+    return 1;
+
+  //Validação de dias e meses
   if (dia > 31 || dia <= 0 || mes <= 0 || mes > 12 || ano <= 0)
     return 1;
   else 
