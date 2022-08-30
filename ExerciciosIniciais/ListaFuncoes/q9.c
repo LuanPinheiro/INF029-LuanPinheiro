@@ -1,10 +1,10 @@
 #include <stdio.h>
 
 typedef struct {
-  char nome[60];
+  char nome[22];
   char cpf[13];
-  char dataNasc[20];
-  char sexo;
+  char dataNasc[12];
+  char sexo[2];
   int erroNome;
   int erroCPF;
   int erroData;
@@ -13,11 +13,13 @@ typedef struct {
 } dados_cliente;
 
 dados_cliente cadastrarCliente();
-int validarNome(char validNome[60]);
+int validarNome(char validNome[22]);
 int validarCPF(char validCPF[13]);
-int validarSexo(char validSexo);
-int validarNascimento(char validNasc[]);
+int validarSexo(char validSexo[2]);
+int validarNascimento(char validNasc[12]);
 void limparString(char string[]);
+int tamString(char string[]);
+void limparBuffer(void);
 
 int main() {
 
@@ -39,7 +41,7 @@ int main() {
     printf("\nNome do Cliente: %s\n", cliente.nome);
     printf("CPF do Cliente: %s\n", cliente.cpf);
     printf("Data de nascimento do Cliente: %s\n", cliente.dataNasc);
-    printf("Sexo do Cliente: %c\n", cliente.sexo);
+    printf("Sexo do Cliente: %c\n", cliente.sexo[0]);
   }
 
   return 0;
@@ -49,27 +51,60 @@ dados_cliente cadastrarCliente() {
 
   dados_cliente clienteCAD;
 
+  clienteCAD.erroNome = 0;
+  clienteCAD.erroCPF = 0;
+  clienteCAD.erroData = 0;
+  clienteCAD.erroSexo = 0;
+
+  int tam;
+
   printf("Digite o nome: ");
-  fgets(clienteCAD.nome, 60, stdin);
+  fgets(clienteCAD.nome, 22, stdin);
   limparString(clienteCAD.nome);
+  tam = tamString(clienteCAD.nome);
+  if(tam>20)
+  {
+    clienteCAD.erroNome = 1;
+    limparBuffer();
+  }
 
   printf("Digite o CPF: ");
   fgets(clienteCAD.cpf, 13, stdin);
   limparString(clienteCAD.cpf);
-
+  tam = tamString(clienteCAD.cpf);
+  if(tam>11)
+    limparBuffer();
+  if(tam>11 || tam<11)
+    clienteCAD.erroCPF = 1;
+  
   printf("Digite a Data de Nascimento: ");
-  fgets(clienteCAD.dataNasc, 20, stdin);
+  fgets(clienteCAD.dataNasc, 12, stdin);
   limparString(clienteCAD.dataNasc);
+  tam = tamString(clienteCAD.dataNasc);
+  if(tam>10)
+    limparBuffer();
+  if(tam>10 || tam<5)
+    clienteCAD.erroData = 1;
 
   printf("Digite o sexo: ");
-  clienteCAD.sexo = getchar();
-  getchar();
-
+  fgets(clienteCAD.sexo, 2, stdin);
+  limparString(clienteCAD.sexo);
+  tam = tamString(clienteCAD.sexo);
+  if(tam>0)
+  {
+    clienteCAD.erroSexo = 1;
+    limparBuffer();
+  }
+    
   // Validações
-  clienteCAD.erroNome = validarNome(clienteCAD.nome);
-  clienteCAD.erroCPF = validarCPF(clienteCAD.cpf);
-  clienteCAD.erroSexo = validarSexo(clienteCAD.sexo);
-  clienteCAD.erroData = validarNascimento(clienteCAD.dataNasc);
+  if(clienteCAD.erroNome == 0)
+    clienteCAD.erroNome = validarNome(clienteCAD.nome);
+  if(clienteCAD.erroCPF == 0)
+    clienteCAD.erroCPF = validarCPF(clienteCAD.cpf);
+  if(clienteCAD.erroSexo == 0)
+    clienteCAD.erroSexo = validarSexo(clienteCAD.sexo);
+  if(clienteCAD.erroData == 0)
+    clienteCAD.erroData = validarNascimento(clienteCAD.dataNasc);
 
   if (clienteCAD.erroNome == 1 || clienteCAD.erroCPF == 1 ||
       clienteCAD.erroSexo == 1 || clienteCAD.erroData)
@@ -80,11 +115,12 @@ dados_cliente cadastrarCliente() {
   return clienteCAD;
 }
 
-int validarNome(char validNome[60]) {
-  int str_size = 0;
+int validarNome(char validNome[22]) {
+  int str_size = 1;
   
-  for(int i=0;i!='\0';i++)
+  for(int i=0;validNome[i]!='\0';i++)
     str_size++;
+
   
   if (str_size > 20)
     return 1;
@@ -95,13 +131,6 @@ int validarNome(char validNome[60]) {
 int validarCPF(char validCPF[13]) {
   int i, soma1 = 0, soma2 = 0;
   int aux = 0;
-
-  //Checando se o CPF tem 11 digitos
-  for (i=0; validCPF[i]!='\0'; i++)
-    if (i > 11)
-      return 1;
-  if (i < 11)
-    return 1;
 
   //Checando se o CPF tem caracteres diferentes de numeros
   for (i=0; validCPF[i]!='\0'; i++)
@@ -139,31 +168,22 @@ int validarCPF(char validCPF[13]) {
   return 0;
 }
 
-int validarSexo(char validSexo) {
+int validarSexo(char validSexo[2]) {
   char valid[] = {'f', 'F', 'm', 'M', 'o', 'O'};
   int i = 0;
   
   for (i = 0; valid[i] != '\0'; i++)
-    if (validSexo == valid[i])
+    if (validSexo[0] == valid[i])
       return 0;
 
   return 1;
 }
 
-int validarNascimento(char validNasc[]) {
+int validarNascimento(char validNasc[12]) {
   int dia, mes, ano, i;
   int identificador = 0;
   int aux, ano_atual = 2022;
   int str_count = 0;
-
-  // Checando se a string de data é muito grande
-  for(i=0;validNasc[i]!='\0';i++)
-    str_count++;
-
-  if(str_count>10)
-    return 1;
-  
-  str_count = 0;
   
   // Conversão de Dias e Mêses em inteiros
   for(i=0;validNasc[i]!='\0';i++)
@@ -248,4 +268,20 @@ void limparString(char string[]){
   for(int i=0;string[i] != '\0';i++)
       if(string[i] == '\n')
         string[i] = '\0';
+}
+
+void limparBuffer(void){
+  char c = 'm';
+  do{
+    c = getchar();
+  }while (c != '\n');
+}
+
+int tamString(char string[]){
+  int i=0;
+
+  while(string[i]!='\0')
+    i++;
+  
+  return i;
 }
