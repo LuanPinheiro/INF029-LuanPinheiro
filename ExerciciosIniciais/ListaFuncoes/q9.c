@@ -4,7 +4,7 @@ typedef struct {
   char nome[22];
   char cpf[13];
   char dataNasc[12];
-  char sexo[2];
+  char sexo[3];
   int erroNome;
   int erroCPF;
   int erroData;
@@ -15,7 +15,7 @@ typedef struct {
 dados_cliente cadastrarCliente();
 int validarNome(char validNome[22]);
 int validarCPF(char validCPF[13]);
-int validarSexo(char validSexo[2]);
+int validarSexo(char validSexo);
 int validarNascimento(char validNasc[12]);
 void limparString(char string[]);
 int tamString(char string[]);
@@ -23,26 +23,49 @@ void limparBuffer(void);
 
 int main() {
 
-  dados_cliente cliente;
+  int n;
 
-  cliente = cadastrarCliente();
+  // Iniciando quantos alunos serão cadastrados
+  do{
+    printf("Digite quantos clientes quer cadastrar: ");
+    scanf("%d", &n);
+    getchar();
+  }while(n<=0);
+  
+  dados_cliente cliente[n];
 
-  if (cliente.errou == 1) {
-    if (cliente.erroNome == 1)
-      printf("\nErro na validação de nome\n");
-    if (cliente.erroCPF == 1)
-      printf("Erro na validação de CPF\n");
-    if (cliente.erroData == 1)
-      printf("Erro na validação de data de nascimento\n");
-    if (cliente.erroSexo == 1)
-      printf("Erro na validação de sexo\n");
-  } else {
-    printf("\nCadastro Realizado com Sucesso\n");
-    printf("\nNome do Cliente: %s\n", cliente.nome);
-    printf("CPF do Cliente: %s\n", cliente.cpf);
-    printf("Data de nascimento do Cliente: %s\n", cliente.dataNasc);
-    printf("Sexo do Cliente: %c\n", cliente.sexo[0]);
+  // Preenchendo dados
+  for(int i=0;i<n;i++)
+  {
+    printf("Insira os dados do cliente %d:\n", i+1);
+    cliente[i] = cadastrarCliente();
+    printf("\n");
   }
+  
+
+  // Print dos dados de cada cliente
+  for(int i=0;i<n;i++){
+    printf("Cliente %d: \n", i+1);
+    printf("\n");
+    if (cliente[i].errou == 1) {
+    if (cliente[i].erroNome == 1)
+      printf("Erro na validação de nome\n");
+    if (cliente[i].erroCPF == 1)
+      printf("Erro na validação de CPF\n");
+    if (cliente[i].erroData == 1)
+      printf("Erro na validação de data de nascimento\n");
+    if (cliente[i].erroSexo == 1)
+      printf("Erro na validação de sexo\n");
+    } else {
+      printf("\nCadastro Realizado com Sucesso\n");
+      printf("\nNome do Cliente: %s\n", cliente[i].nome);
+      printf("CPF do Cliente: %s\n", cliente[i].cpf);
+      printf("Data de nascimento do Cliente: %s\n", cliente[i].dataNasc);
+      printf("Sexo do Cliente: %c\n", cliente[i].sexo[0]);
+    }
+    printf("\n");
+  }
+  
 
   return 0;
 }
@@ -67,6 +90,8 @@ dados_cliente cadastrarCliente() {
     clienteCAD.erroNome = 1;
     limparBuffer();
   }
+  else if(tam == 0)
+    clienteCAD.erroNome = 1;
 
   printf("Digite o CPF: ");
   fgets(clienteCAD.cpf, 13, stdin);
@@ -87,10 +112,10 @@ dados_cliente cadastrarCliente() {
     clienteCAD.erroData = 1;
 
   printf("Digite o sexo: ");
-  fgets(clienteCAD.sexo, 2, stdin);
+  fgets(clienteCAD.sexo, 3, stdin);
   limparString(clienteCAD.sexo);
   tam = tamString(clienteCAD.sexo);
-  if(tam>0)
+  if(tam>1)
   {
     clienteCAD.erroSexo = 1;
     limparBuffer();
@@ -102,7 +127,7 @@ dados_cliente cadastrarCliente() {
   if(clienteCAD.erroCPF == 0)
     clienteCAD.erroCPF = validarCPF(clienteCAD.cpf);
   if(clienteCAD.erroSexo == 0)
-    clienteCAD.erroSexo = validarSexo(clienteCAD.sexo);
+    clienteCAD.erroSexo = validarSexo(clienteCAD.sexo[0]);
   if(clienteCAD.erroData == 0)
     clienteCAD.erroData = validarNascimento(clienteCAD.dataNasc);
 
@@ -168,12 +193,12 @@ int validarCPF(char validCPF[13]) {
   return 0;
 }
 
-int validarSexo(char validSexo[2]) {
+int validarSexo(char validSexo) {
   char valid[] = {'f', 'F', 'm', 'M', 'o', 'O'};
   int i = 0;
   
   for (i = 0; valid[i] != '\0'; i++)
-    if (validSexo[0] == valid[i])
+    if (validSexo == valid[i])
       return 0;
 
   return 1;
@@ -190,7 +215,9 @@ int validarNascimento(char validNasc[12]) {
   { 
     if(validNasc[i] == '/')
     {
-      if(str_count == 0 || str_count > 2)
+      if(identificador == 2)
+        return 1;
+      else if(str_count == 0 || str_count > 2)
         return 1;
       else 
         if(str_count == 2)
