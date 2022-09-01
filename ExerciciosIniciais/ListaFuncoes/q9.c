@@ -13,10 +13,10 @@ typedef struct {
 } dados_cliente;
 
 dados_cliente cadastrarCliente();
-int validarNome(char validNome[22]);
-int validarCPF(char validCPF[13]);
+int validarNome(char validNome[]);
+int validarCPF(char validCPF[]);
 int validarSexo(char validSexo);
-int validarNascimento(char validNasc[12]);
+int validarNascimento(char validNasc[]);
 void limparString(char string[]);
 int tamString(char string[]);
 void limparBuffer(void);
@@ -37,7 +37,7 @@ int main() {
   // Preenchendo dados
   for(int i=0;i<n;i++)
   {
-    printf("Insira os dados do cliente %d:\n", i+1);
+    printf("\nInsira os dados do cliente %d:\n", i+1);
     cliente[i] = cadastrarCliente();
     printf("\n");
   }
@@ -140,20 +140,14 @@ dados_cliente cadastrarCliente() {
   return clienteCAD;
 }
 
-int validarNome(char validNome[22]) {
-  int str_size = 1;
-  
+int validarNome(char validNome[]) {
   for(int i=0;validNome[i]!='\0';i++)
-    str_size++;
+    if(validNome[i]>122 || validNome[i]!=32 && validNome[i]<65)
+      return 1;
 
-  
-  if (str_size > 20)
-    return 1;
-  else
-    return 0;
 }
 
-int validarCPF(char validCPF[13]) {
+int validarCPF(char validCPF[]) {
   int i, soma1 = 0, soma2 = 0;
   int aux = 0;
 
@@ -204,7 +198,7 @@ int validarSexo(char validSexo) {
   return 1;
 }
 
-int validarNascimento(char validNasc[12]) {
+int validarNascimento(char validNasc[]) {
   int dia, mes, ano, i;
   int identificador = 0;
   int aux, ano_atual = 2022;
