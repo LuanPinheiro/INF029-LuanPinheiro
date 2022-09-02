@@ -128,7 +128,10 @@ int menu_Alunos(ficha_pessoa alunos[], int qtd_alunos){
     switch(menu_alunos){
       case 0: break;
       case 1: qtd_alunos = cadastro_Alunos(alunos, qtd_alunos); break;
-      case 2: listar_Alunos(alunos, qtd_alunos); break;
+      case 2: if(qtd_alunos>0)
+        listar_Alunos(alunos, qtd_alunos);
+        else
+          printf("***NAO HA ALUNOS CADASTRADOS***\n\n"); break;
       case 3: break;
       case 4: break;
       case 5: break;
@@ -355,10 +358,10 @@ int insert_Aluno(ficha_pessoa alunos[], int qtd_alunos){
 
 void listar_Alunos(ficha_pessoa alunos[], int qtd_alunos){
   for(int i=0;i<qtd_alunos;i++){
-    printf("\n\nNome: %s\n", alunos[qtd_alunos].nome);
-    printf("\nData de Nascimento: %s\n", alunos[qtd_alunos].dataNasc);
-    printf("\nSexo: %c\n", alunos[qtd_alunos].sexo[0]);
-    printf("\nCPF: %s\n\n", alunos[qtd_alunos].cpf);
+    printf("\n\nNome: %s\n", alunos[i].nome);
+    printf("\nData de Nascimento: %s\n", alunos[i].dataNasc);
+    printf("\nSexo: %c\n", alunos[i].sexo[0]);
+    printf("\nCPF: %s\n\n", alunos[i].cpf);
   }
 }
 //****** FUNÇÕES DE VALIDAÇÃO ******
