@@ -12,7 +12,7 @@ typedef struct {
   int errou;
 } dados_cliente;
 
-dados_cliente cadastrarCliente();
+void cadastrarCliente(dados_cliente clienteCAD[], int i);
 int validarNome(char validNome[]);
 int validarCPF(char validCPF[]);
 int validarSexo(char validSexo);
@@ -38,7 +38,7 @@ int main() {
   for(int i=0;i<n;i++)
   {
     printf("\nInsira os dados do cliente %d:\n", i+1);
-    cliente[i] = cadastrarCliente();
+    cadastrarCliente(cliente, i);
     printf("\n");
   }
   
@@ -70,74 +70,70 @@ int main() {
   return 0;
 }
 
-dados_cliente cadastrarCliente() {
+void cadastrarCliente(dados_cliente clienteCAD[], int i){
 
-  dados_cliente clienteCAD;
-
-  clienteCAD.erroNome = 0;
-  clienteCAD.erroCPF = 0;
-  clienteCAD.erroData = 0;
-  clienteCAD.erroSexo = 0;
+  clienteCAD[i].erroNome = 0;
+  clienteCAD[i].erroCPF = 0;
+  clienteCAD[i].erroData = 0;
+  clienteCAD[i].erroSexo = 0;
 
   int tam;
 
   printf("Digite o nome: ");
-  fgets(clienteCAD.nome, 22, stdin);
-  limparString(clienteCAD.nome);
-  tam = tamString(clienteCAD.nome);
+  fgets(clienteCAD[i].nome, 22, stdin);
+  limparString(clienteCAD[i].nome);
+  tam = tamString(clienteCAD[i].nome);
   if(tam>20)
   {
-    clienteCAD.erroNome = 1;
+    clienteCAD[i].erroNome = 1;
     limparBuffer();
   }
   else if(tam == 0)
-    clienteCAD.erroNome = 1;
+    clienteCAD[i].erroNome = 1;
 
   printf("Digite o CPF: ");
-  fgets(clienteCAD.cpf, 13, stdin);
-  limparString(clienteCAD.cpf);
-  tam = tamString(clienteCAD.cpf);
+  fgets(clienteCAD[i].cpf, 13, stdin);
+  limparString(clienteCAD[i].cpf);
+  tam = tamString(clienteCAD[i].cpf);
   if(tam>11)
     limparBuffer();
   if(tam>11 || tam<11)
-    clienteCAD.erroCPF = 1;
+    clienteCAD[i].erroCPF = 1;
   
   printf("Digite a Data de Nascimento: ");
-  fgets(clienteCAD.dataNasc, 12, stdin);
-  limparString(clienteCAD.dataNasc);
-  tam = tamString(clienteCAD.dataNasc);
+  fgets(clienteCAD[i].dataNasc, 12, stdin);
+  limparString(clienteCAD[i].dataNasc);
+  tam = tamString(clienteCAD[i].dataNasc);
   if(tam>10)
     limparBuffer();
   if(tam>10 || tam<5)
-    clienteCAD.erroData = 1;
+    clienteCAD[i].erroData = 1;
 
   printf("Digite o sexo: ");
-  fgets(clienteCAD.sexo, 3, stdin);
-  limparString(clienteCAD.sexo);
-  tam = tamString(clienteCAD.sexo);
+  fgets(clienteCAD[i].sexo, 3, stdin);
+  limparString(clienteCAD[i].sexo);
+  tam = tamString(clienteCAD[i].sexo);
   if(tam>1)
   {
-    clienteCAD.erroSexo = 1;
+    clienteCAD[i].erroSexo = 1;
     limparBuffer();
   }
     
   // Validações
-  if(clienteCAD.erroNome == 0)
-    clienteCAD.erroNome = validarNome(clienteCAD.nome);
-  if(clienteCAD.erroCPF == 0)
-    clienteCAD.erroCPF = validarCPF(clienteCAD.cpf);
-  if(clienteCAD.erroSexo == 0)
-    clienteCAD.erroSexo = validarSexo(clienteCAD.sexo[0]);
-  if(clienteCAD.erroData == 0)
-    clienteCAD.erroData = validarNascimento(clienteCAD.dataNasc);
+  if(clienteCAD[i].erroNome == 0)
+    clienteCAD[i].erroNome = validarNome(clienteCAD[i].nome);
+  if(clienteCAD[i].erroCPF == 0)
+    clienteCAD[i].erroCPF = validarCPF(clienteCAD[i].cpf);
+  if(clienteCAD[i].erroSexo == 0)
+    clienteCAD[i].erroSexo = validarSexo(clienteCAD[i].sexo[0]);
+  if(clienteCAD[i].erroData == 0)
+    clienteCAD[i].erroData = validarNascimento(clienteCAD[i].dataNasc);
 
-  if (clienteCAD.erroNome == 1 || clienteCAD.erroCPF == 1 ||
-      clienteCAD.erroSexo == 1 || clienteCAD.erroData)
-    clienteCAD.errou = 1;
+  if (clienteCAD[i].erroNome == 1 || clienteCAD[i].erroCPF == 1 ||
+      clienteCAD[i].erroSexo == 1 || clienteCAD[i].erroData)
+    clienteCAD[i].errou = 1;
   else
-    clienteCAD.errou = 0;
-
-  return clienteCAD;
+    clienteCAD[i].errou = 0;
 }
 
 int validarNome(char validNome[]) {

@@ -2,7 +2,7 @@
 
 void ler3numeros(int vetor[3]);
 
-int main() {
+int main(){
 
   int v[3];
 
@@ -16,7 +16,6 @@ int main() {
 }
 
 void ler3numeros(int vetor[3]){
-
   scanf("%d", &vetor[0]);
   scanf("%d", &vetor[1]);
   scanf("%d", &vetor[2]);

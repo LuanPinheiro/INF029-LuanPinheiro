@@ -23,17 +23,38 @@ Relatórios:
 */
 
 #include <stdio.h>
+#define vet_size 10
+
+typedef struct {
+  char nome[32];
+  char cpf[13];
+  char dataNasc[12];
+  char sexo[3];
+  int erroNome;
+  int erroCPF;
+  int erroData;
+  int erroSexo;
+  int errou;
+} dados_cliente;
 
 typedef struct{
 char matricula[12];
-char nome [32];
+char nome[32];
 char sexo[3];
 char dataNasc[12];
 char cpf[13];
 }ficha_pessoa;
 
-void menu_Alunos();
+typedef struct{
+char nome[32];
+char codigo[8];
+char semestre[8];
+char nome_prof[32];
+}ficha_disciplina;
+
+ficha_pessoa menu_Alunos();
 void cadastro_Alunos();
+void insert_Aluno();
 
 void menu_Professores();
 void cadastro_Professores();
@@ -47,6 +68,10 @@ int main(){
   // criando um sistema de menu, levando o usuário para setores do sistema, facilitando navegação
   int menu_main;
 
+  ficha_pessoa alunos[vet_size];
+  ficha_pessoa professores[vet_size];
+  ficha_disciplina disciplinas[vet_size];
+  
   do{
     imprimir_linhas();
     printf("\nMENU PRINCIPAL\n\n");
@@ -167,7 +192,7 @@ void cadastro_Alunos(){
 
     switch(menu_cadAluno){
       case 0: break;
-      case 1: break;
+      case 1: insert_Aluno(); break;
       case 2: break;
       case 3: break;
       default: if(menu_cadAluno!=0){
@@ -223,6 +248,10 @@ void cadastro_Disciplinas(){
       }
     }
   }while(menu_cadDisciplina!=0);
+}
+
+void insert_Aluno(){
+  //
 }
 
 void imprimir_linhas(){
