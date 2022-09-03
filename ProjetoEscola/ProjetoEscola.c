@@ -52,15 +52,18 @@ char nome_prof[32];
 int menu_Alunos(ficha_pessoa alunos[], int qtd_alunos);
 int cadastro_Alunos(ficha_pessoa alunos[], int qtd_alunos);
 int insert_Aluno(ficha_pessoa alunos[], int qtd_alunos);
-void listar_Alunos(ficha_pessoa alunos[], int qtd_alunos);
 
 // Professores
-void menu_Professores();
-void cadastro_Professores();
+int menu_Professores(ficha_pessoa professores[], int qtd_prof);
+int cadastro_Professores(ficha_pessoa professores[], int qtd_prof);
+int insert_Prof(ficha_pessoa professores[], int qtd_prof);
 
 // Disciplinas
 void menu_Disciplinas();
 void cadastro_Disciplinas();
+
+// Gerais
+void listar(ficha_pessoa pessoas[], int qtd);
 
 // Auxiliares
 void limparString(char string[]);
@@ -99,7 +102,7 @@ int main(){
     switch(menu_main){
       case 0: break;
       case 1: qtd_alunos = menu_Alunos(alunos, qtd_alunos); break;
-      case 2: menu_Professores(); break;
+      case 2: qtd_prof = menu_Professores(professores, qtd_prof); break;
       case 3: menu_Disciplinas(); break;
       case 4: break;
       case 5: break;
@@ -129,7 +132,7 @@ int menu_Alunos(ficha_pessoa alunos[], int qtd_alunos){
       case 0: break;
       case 1: qtd_alunos = cadastro_Alunos(alunos, qtd_alunos); break;
       case 2: if(qtd_alunos>0)
-        listar_Alunos(alunos, qtd_alunos);
+        listar(alunos, qtd_alunos);
         else
           printf("***NAO HA ALUNOS CADASTRADOS***\n\n"); break;
       case 3: break;
@@ -145,7 +148,7 @@ int menu_Alunos(ficha_pessoa alunos[], int qtd_alunos){
   return qtd_alunos;
 }
 
-void menu_Professores(){
+int menu_Professores(ficha_pessoa professores[], int qtd_prof){
   int menu_prof;
 
   do{
@@ -159,8 +162,11 @@ void menu_Professores(){
 
     switch(menu_prof){
       case 0: break;
-      case 1: cadastro_Professores(); break;
-      case 2: break;
+      case 1: qtd_prof = cadastro_Professores(professores, qtd_prof); break;
+      case 2: if(qtd_prof>0)
+        listar(professores, qtd_prof);
+        else
+          printf("***NAO HA PROFESSORES CADASTRADOS***\n\n"); break;
       case 3: break;
       case 4: break;
       case 5: break;
@@ -169,6 +175,8 @@ void menu_Professores(){
       }
     }
   }while(menu_prof!=0);
+
+  return qtd_prof;
 }
 
 void menu_Disciplinas(){
@@ -224,7 +232,7 @@ int cadastro_Alunos(ficha_pessoa alunos[], int qtd_alunos){
   return qtd_alunos;
 }
 
-void cadastro_Professores(){
+int cadastro_Professores(ficha_pessoa professores[], int qtd_prof){
   int menu_cadProf;
 
   do{
@@ -238,7 +246,7 @@ void cadastro_Professores(){
 
     switch(menu_cadProf){
       case 0: break;
-      case 1: break;
+      case 1: qtd_prof = insert_Prof(professores, qtd_prof); break;
       case 2: break;
       case 3: break;
       default: if(menu_cadProf!=0){
@@ -246,6 +254,8 @@ void cadastro_Professores(){
       }
     }
   }while(menu_cadProf!=0);
+
+  return qtd_prof;
 }
 
 void cadastro_Disciplinas(){
@@ -355,13 +365,96 @@ int insert_Aluno(ficha_pessoa alunos[], int qtd_alunos){
   return qtd_alunos;
 }
 
+int insert_Prof(ficha_pessoa professores[], int qtd_prof){
+  
+  professores[qtd_prof].erroNome = 0;
+  professores[qtd_prof].erroCPF = 0;
+  professores[qtd_prof].erroData = 0;
+  professores[qtd_prof].erroSexo = 0;
 
-void listar_Alunos(ficha_pessoa alunos[], int qtd_alunos){
-  for(int i=0;i<qtd_alunos;i++){
-    printf("\n\nNome: %s\n", alunos[i].nome);
-    printf("\nData de Nascimento: %s\n", alunos[i].dataNasc);
-    printf("\nSexo: %c\n", alunos[i].sexo[0]);
-    printf("\nCPF: %s\n\n", alunos[i].cpf);
+  int tam;
+
+  //Todas as entradas já são validadas por tamanho antes de fazer as validações mais complexas
+  printf("Digite o nome: ");
+  fgets(professores[qtd_prof].nome, 22, stdin);
+  limparString(professores[qtd_prof].nome);
+  tam = tamString(professores[qtd_prof].nome);
+  if(tam>20)
+  {
+    professores[qtd_prof].erroNome = 1;
+    limparBuffer();
+  }
+  else if(tam == 0)
+    professores[qtd_prof].erroNome = 1;
+
+  printf("Digite o CPF: ");
+  fgets(professores[qtd_prof].cpf, 13, stdin);
+  limparString(professores[qtd_prof].cpf);
+  tam = tamString(professores[qtd_prof].cpf);
+  if(tam>11)
+    limparBuffer();
+  if(tam>11 || tam<11)
+    professores[qtd_prof].erroCPF = 1;
+  
+  printf("Digite a Data de Nascimento: ");
+  fgets(professores[qtd_prof].dataNasc, 12, stdin);
+  limparString(professores[qtd_prof].dataNasc);
+  tam = tamString(professores[qtd_prof].dataNasc);
+  if(tam>10)
+    limparBuffer();
+  if(tam>10 || tam<5)
+    professores[qtd_prof].erroData = 1;
+
+  printf("Digite o sexo: ");
+  fgets(professores[qtd_prof].sexo, 3, stdin);
+  limparString(professores[qtd_prof].sexo);
+  tam = tamString(professores[qtd_prof].sexo);
+  if(tam>1)
+  {
+    professores[qtd_prof].erroSexo = 1;
+    limparBuffer();
+  }
+
+  // Validações
+  if(professores[qtd_prof].erroNome == 0)
+    professores[qtd_prof].erroNome = validarNome(professores[qtd_prof].nome);
+  if(professores[qtd_prof].erroCPF == 0)
+    professores[qtd_prof].erroCPF = validarCPF(professores[qtd_prof].cpf);
+  if(professores[qtd_prof].erroSexo == 0)
+    professores[qtd_prof].erroSexo = validarSexo(professores[qtd_prof].sexo[0]);
+  if(professores[qtd_prof].erroData == 0)
+    professores[qtd_prof].erroData = validarNascimento(professores[qtd_prof].dataNasc);
+
+  if (professores[qtd_prof].erroNome == 1 || professores[qtd_prof].erroCPF == 1 || professores[qtd_prof].erroSexo == 1 || professores[qtd_prof].erroData)
+    professores[qtd_prof].errou = 1;
+  else
+    professores[qtd_prof].errou = 0;
+
+  if(professores[qtd_prof].errou == 0)
+    qtd_prof++;
+
+  if (professores[qtd_prof].errou == 1) {
+    if (professores[qtd_prof].erroNome == 1)
+      printf("Erro na validação de nome\n");
+    if (professores[qtd_prof].erroCPF == 1)
+      printf("Erro na validação de CPF\n");
+    if (professores[qtd_prof].erroData == 1)
+      printf("Erro na validação de data de nascimento\n");
+    if (professores[qtd_prof].erroSexo == 1)
+      printf("Erro na validação de sexo\n");
+  } else
+    printf("\nCadastro Realizado com Sucesso\n");
+  
+  return qtd_prof;
+}
+
+
+void listar(ficha_pessoa pessoas[], int qtd){
+  for(int i=0;i<qtd;i++){
+    printf("\n\nNome: %s\n", pessoas[i].nome);
+    printf("\nData de Nascimento: %s\n", pessoas[i].dataNasc);
+    printf("\nSexo: %c\n", pessoas[i].sexo[0]);
+    printf("\nCPF: %s\n\n", pessoas[i].cpf);
   }
 }
 //****** FUNÇÕES DE VALIDAÇÃO ******
