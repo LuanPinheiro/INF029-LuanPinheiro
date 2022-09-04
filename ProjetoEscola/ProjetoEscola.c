@@ -36,6 +36,7 @@ int erroNome;
 int erroCPF;
 int erroData;
 int erroSexo;
+int erroMat;
 int errou;
 }ficha_pessoa;
 
@@ -43,7 +44,12 @@ typedef struct{
 char nome[32];
 char codigo[8];
 char semestre[8];
-char nome_prof[32];
+char nome_p[32];
+int erroNome;
+int erroCodigo;
+int erroSemestre;
+int erroNome_p;
+int errou;
 }ficha_disciplina;
 
 //Menus e cadastros
@@ -51,19 +57,21 @@ char nome_prof[32];
 // Alunos
 int menu_Alunos(ficha_pessoa alunos[], int qtd_alunos);
 int cadastro_Alunos(ficha_pessoa alunos[], int qtd_alunos);
-int insert_Aluno(ficha_pessoa alunos[], int qtd_alunos);
 
 // Professores
 int menu_Professores(ficha_pessoa professores[], int qtd_prof);
 int cadastro_Professores(ficha_pessoa professores[], int qtd_prof);
-int insert_Prof(ficha_pessoa professores[], int qtd_prof);
 
 // Disciplinas
-void menu_Disciplinas();
-void cadastro_Disciplinas();
+int menu_Disciplinas(ficha_disciplina disciplinas[], int qtd_disciplina);
+int cadastro_Disciplinas(ficha_disciplina disciplinas[], int qtd_disciplina);
+int insert_Disciplina(ficha_disciplina disciplinas[], int qtd_disciplina);
 
 // Gerais
-void listar(ficha_pessoa pessoas[], int qtd);
+int insert_Pessoa(ficha_pessoa pessoa[], int qtd);
+void listar_pessoas(ficha_pessoa pessoas[], int qtd);
+void listar_disciplinas(ficha_disciplina disciplinas[], int qtd);
+void transformMaiusculo(char string[]);
 
 // Auxiliares
 void limparString(char string[]);
@@ -76,6 +84,9 @@ int validarNome(char validNome[]);
 int validarCPF(char validCPF[]);
 int validarSexo(char validSexo);
 int validarNascimento(char validNasc[]);
+int validarMatricula(char validMat[]);
+int validarCodigo(char validCod[]);
+int validarSemestre(char validSemestre[]);
 
 int main(){
   // Criando um sistema de menu, levando o usuário para setores do sistema, facilitando navegação
@@ -103,7 +114,7 @@ int main(){
       case 0: break;
       case 1: qtd_alunos = menu_Alunos(alunos, qtd_alunos); break;
       case 2: qtd_prof = menu_Professores(professores, qtd_prof); break;
-      case 3: menu_Disciplinas(); break;
+      case 3: qtd_disciplina = menu_Disciplinas(disciplinas, qtd_disciplina); break;
       case 4: break;
       case 5: break;
       default: if(menu_main!=0){
@@ -132,7 +143,7 @@ int menu_Alunos(ficha_pessoa alunos[], int qtd_alunos){
       case 0: break;
       case 1: qtd_alunos = cadastro_Alunos(alunos, qtd_alunos); break;
       case 2: if(qtd_alunos>0)
-        listar(alunos, qtd_alunos);
+        listar_pessoas(alunos, qtd_alunos);
         else
           printf("***NAO HA ALUNOS CADASTRADOS***\n\n"); break;
       case 3: break;
@@ -164,7 +175,7 @@ int menu_Professores(ficha_pessoa professores[], int qtd_prof){
       case 0: break;
       case 1: qtd_prof = cadastro_Professores(professores, qtd_prof); break;
       case 2: if(qtd_prof>0)
-        listar(professores, qtd_prof);
+        listar_pessoas(professores, qtd_prof);
         else
           printf("***NAO HA PROFESSORES CADASTRADOS***\n\n"); break;
       case 3: break;
@@ -179,7 +190,7 @@ int menu_Professores(ficha_pessoa professores[], int qtd_prof){
   return qtd_prof;
 }
 
-void menu_Disciplinas(){
+int menu_Disciplinas(ficha_disciplina disciplinas[], int qtd_disciplina){
   int menu_disciplina;
 
   do{
@@ -193,8 +204,11 @@ void menu_Disciplinas(){
 
     switch(menu_disciplina){
       case 0: break;
-      case 1: cadastro_Disciplinas(); break;
-      case 2: break;
+      case 1: qtd_disciplina = cadastro_Disciplinas(disciplinas, qtd_disciplina); break;
+      case 2: if(qtd_disciplina>0)
+        listar_disciplinas(disciplinas, qtd_disciplina);
+        else
+          printf("***NAO HA DISCIPLINAS CADASTRADAS***\n\n"); break;
       case 3: break;
       case 4: break;
       case 5: break;
@@ -204,6 +218,8 @@ void menu_Disciplinas(){
       }
     }
   }while(menu_disciplina!=0);
+
+  return qtd_disciplina;
 }
 
 int cadastro_Alunos(ficha_pessoa alunos[], int qtd_alunos){
@@ -220,7 +236,7 @@ int cadastro_Alunos(ficha_pessoa alunos[], int qtd_alunos){
 
     switch(menu_cadAluno){
       case 0: break;
-      case 1: qtd_alunos = insert_Aluno(alunos, qtd_alunos); break;
+      case 1: qtd_alunos = insert_Pessoa(alunos, qtd_alunos); break;
       case 2: break;
       case 3: break;
       default: if(menu_cadAluno!=0){
@@ -246,7 +262,7 @@ int cadastro_Professores(ficha_pessoa professores[], int qtd_prof){
 
     switch(menu_cadProf){
       case 0: break;
-      case 1: qtd_prof = insert_Prof(professores, qtd_prof); break;
+      case 1: qtd_prof = insert_Pessoa(professores, qtd_prof); break;
       case 2: break;
       case 3: break;
       default: if(menu_cadProf!=0){
@@ -258,7 +274,7 @@ int cadastro_Professores(ficha_pessoa professores[], int qtd_prof){
   return qtd_prof;
 }
 
-void cadastro_Disciplinas(){
+int cadastro_Disciplinas(ficha_disciplina disciplinas[], int qtd_disciplina){
   int menu_cadDisciplina;
 
   do{
@@ -272,7 +288,7 @@ void cadastro_Disciplinas(){
 
     switch(menu_cadDisciplina){
       case 0: break;
-      case 1: break;
+      case 1: qtd_disciplina = insert_Disciplina(disciplinas, qtd_disciplina); break;
       case 2: break;
       case 3: break;
       default: if(menu_cadDisciplina!=0){
@@ -280,176 +296,193 @@ void cadastro_Disciplinas(){
       }
     }
   }while(menu_cadDisciplina!=0);
+
+  return qtd_disciplina;
 }
 
-int insert_Aluno(ficha_pessoa alunos[], int qtd_alunos){
+int insert_Pessoa(ficha_pessoa pessoa[], int qtd){
   
-  alunos[qtd_alunos].erroNome = 0;
-  alunos[qtd_alunos].erroCPF = 0;
-  alunos[qtd_alunos].erroData = 0;
-  alunos[qtd_alunos].erroSexo = 0;
+  pessoa[qtd].erroNome = 0;
+  pessoa[qtd].erroCPF = 0;
+  pessoa[qtd].erroData = 0;
+  pessoa[qtd].erroSexo = 0;
+  pessoa[qtd].erroMat = 0;
 
   int tam;
 
   //Todas as entradas já são validadas por tamanho antes de fazer as validações mais complexas
   printf("Digite o nome: ");
-  fgets(alunos[qtd_alunos].nome, 22, stdin);
-  limparString(alunos[qtd_alunos].nome);
-  tam = tamString(alunos[qtd_alunos].nome);
-  if(tam>20)
+  fgets(pessoa[qtd].nome, 32, stdin);
+  limparString(pessoa[qtd].nome);
+  tam = tamString(pessoa[qtd].nome);
+  if(tam>30)
   {
-    alunos[qtd_alunos].erroNome = 1;
+    pessoa[qtd].erroNome = 1;
     limparBuffer();
   }
   else if(tam == 0)
-    alunos[qtd_alunos].erroNome = 1;
+    pessoa[qtd].erroNome = 1;
 
   printf("Digite o CPF: ");
-  fgets(alunos[qtd_alunos].cpf, 13, stdin);
-  limparString(alunos[qtd_alunos].cpf);
-  tam = tamString(alunos[qtd_alunos].cpf);
-  if(tam>11)
-    limparBuffer();
-  if(tam>11 || tam<11)
-    alunos[qtd_alunos].erroCPF = 1;
+  fgets(pessoa[qtd].cpf, 13, stdin);
+  limparString(pessoa[qtd].cpf);
+  tam = tamString(pessoa[qtd].cpf);
+  if(tam!=11)
+  {
+    pessoa[qtd].erroCPF = 1;
+    if(tam>11)
+      limparBuffer();
+  }
+
+  printf("Digite a Matricula: ");
+  fgets(pessoa[qtd].matricula, 12, stdin);
+  limparString(pessoa[qtd].matricula);
+  tam = tamString(pessoa[qtd].matricula);
+  if(tam!=10)
+  {
+    pessoa[qtd].erroMat = 1;
+    if(tam>10)
+      limparBuffer();
+  }
   
   printf("Digite a Data de Nascimento: ");
-  fgets(alunos[qtd_alunos].dataNasc, 12, stdin);
-  limparString(alunos[qtd_alunos].dataNasc);
-  tam = tamString(alunos[qtd_alunos].dataNasc);
+  fgets(pessoa[qtd].dataNasc, 12, stdin);
+  limparString(pessoa[qtd].dataNasc);
+  tam = tamString(pessoa[qtd].dataNasc);
   if(tam>10)
     limparBuffer();
   if(tam>10 || tam<5)
-    alunos[qtd_alunos].erroData = 1;
+    pessoa[qtd].erroData = 1;
 
   printf("Digite o sexo: ");
-  fgets(alunos[qtd_alunos].sexo, 3, stdin);
-  limparString(alunos[qtd_alunos].sexo);
-  tam = tamString(alunos[qtd_alunos].sexo);
+  fgets(pessoa[qtd].sexo, 3, stdin);
+  limparString(pessoa[qtd].sexo);
+  tam = tamString(pessoa[qtd].sexo);
   if(tam>1)
   {
-    alunos[qtd_alunos].erroSexo = 1;
+    pessoa[qtd].erroSexo = 1;
     limparBuffer();
   }
 
   // Validações
-  if(alunos[qtd_alunos].erroNome == 0)
-    alunos[qtd_alunos].erroNome = validarNome(alunos[qtd_alunos].nome);
-  if(alunos[qtd_alunos].erroCPF == 0)
-    alunos[qtd_alunos].erroCPF = validarCPF(alunos[qtd_alunos].cpf);
-  if(alunos[qtd_alunos].erroSexo == 0)
-    alunos[qtd_alunos].erroSexo = validarSexo(alunos[qtd_alunos].sexo[0]);
-  if(alunos[qtd_alunos].erroData == 0)
-    alunos[qtd_alunos].erroData = validarNascimento(alunos[qtd_alunos].dataNasc);
+  if(pessoa[qtd].erroNome == 0)
+    pessoa[qtd].erroNome = validarNome(pessoa[qtd].nome);
+  if(pessoa[qtd].erroCPF == 0)
+    pessoa[qtd].erroCPF = validarCPF(pessoa[qtd].cpf);
+  if(pessoa[qtd].erroSexo == 0)
+    pessoa[qtd].erroSexo = validarSexo(pessoa[qtd].sexo[0]);
+  if(pessoa[qtd].erroData == 0)
+    pessoa[qtd].erroData = validarNascimento(pessoa[qtd].dataNasc);
+  if(pessoa[qtd].erroMat == 0)
+    pessoa[qtd].erroMat = validarMatricula(pessoa[qtd].matricula);
 
-  if (alunos[qtd_alunos].erroNome == 1 || alunos[qtd_alunos].erroCPF == 1 || alunos[qtd_alunos].erroSexo == 1 || alunos[qtd_alunos].erroData)
-    alunos[qtd_alunos].errou = 1;
+  if (pessoa[qtd].erroNome == 1 || pessoa[qtd].erroCPF == 1 || pessoa[qtd].erroSexo == 1 || pessoa[qtd].erroData || pessoa[qtd].erroMat == 1)
+    pessoa[qtd].errou = 1;
   else
-    alunos[qtd_alunos].errou = 0;
+    pessoa[qtd].errou = 0;
 
-  if(alunos[qtd_alunos].errou == 0)
-    qtd_alunos++;
-
-  if (alunos[qtd_alunos].errou == 1) {
-    if (alunos[qtd_alunos].erroNome == 1)
-      printf("Erro na validação de nome\n");
-    if (alunos[qtd_alunos].erroCPF == 1)
-      printf("Erro na validação de CPF\n");
-    if (alunos[qtd_alunos].erroData == 1)
-      printf("Erro na validação de data de nascimento\n");
-    if (alunos[qtd_alunos].erroSexo == 1)
-      printf("Erro na validação de sexo\n");
-  } else
+  if(pessoa[qtd].errou == 0){
     printf("\nCadastro Realizado com Sucesso\n");
+    qtd++;
+  } else{
+    if (pessoa[qtd].erroNome == 1)
+      printf("Erro na validação de nome\n");
+    if (pessoa[qtd].erroCPF == 1)
+      printf("Erro na validação de CPF\n");
+    if (pessoa[qtd].erroMat == 1)
+      printf("Erro na validação de matricula\n");
+    if (pessoa[qtd].erroData == 1)
+      printf("Erro na validação de data de nascimento\n");
+    if (pessoa[qtd].erroSexo == 1)
+      printf("Erro na validação de sexo\n");
+  }
   
-  return qtd_alunos;
+  return qtd;
 }
 
-int insert_Prof(ficha_pessoa professores[], int qtd_prof){
+int insert_Disciplina(ficha_disciplina disciplinas[], int qtd_disciplina){
   
-  professores[qtd_prof].erroNome = 0;
-  professores[qtd_prof].erroCPF = 0;
-  professores[qtd_prof].erroData = 0;
-  professores[qtd_prof].erroSexo = 0;
+  disciplinas[qtd_disciplina].erroNome = 0;
+  disciplinas[qtd_disciplina].erroCodigo = 0;
+  disciplinas[qtd_disciplina].erroSemestre = 0;
+  disciplinas[qtd_disciplina].erroNome_p = 0;
 
   int tam;
 
   //Todas as entradas já são validadas por tamanho antes de fazer as validações mais complexas
-  printf("Digite o nome: ");
-  fgets(professores[qtd_prof].nome, 22, stdin);
-  limparString(professores[qtd_prof].nome);
-  tam = tamString(professores[qtd_prof].nome);
-  if(tam>20)
+  printf("Digite o nome da disciplina: ");
+  fgets(disciplinas[qtd_disciplina].nome, 32, stdin);
+  limparString(disciplinas[qtd_disciplina].nome);
+  tam = tamString(disciplinas[qtd_disciplina].nome);
+  if(tam>30)
   {
-    professores[qtd_prof].erroNome = 1;
+    disciplinas[qtd_disciplina].erroNome = 1;
     limparBuffer();
-  }
-  else if(tam == 0)
-    professores[qtd_prof].erroNome = 1;
+  } else if(tam == 0)
+    disciplinas[qtd_disciplina].erroNome = 1;
 
-  printf("Digite o CPF: ");
-  fgets(professores[qtd_prof].cpf, 13, stdin);
-  limparString(professores[qtd_prof].cpf);
-  tam = tamString(professores[qtd_prof].cpf);
-  if(tam>11)
+  printf("Digite o codigo da disciplina: ");
+  fgets(disciplinas[qtd_disciplina].codigo, 8, stdin);
+  limparString(disciplinas[qtd_disciplina].codigo);
+  tam = tamString(disciplinas[qtd_disciplina].codigo);
+  if(tam>6)
     limparBuffer();
-  if(tam>11 || tam<11)
-    professores[qtd_prof].erroCPF = 1;
+  if(tam!=6)
+    disciplinas[qtd_disciplina].erroCodigo = 1;
   
-  printf("Digite a Data de Nascimento: ");
-  fgets(professores[qtd_prof].dataNasc, 12, stdin);
-  limparString(professores[qtd_prof].dataNasc);
-  tam = tamString(professores[qtd_prof].dataNasc);
-  if(tam>10)
+  printf("Digite o semestre da disciplina: ");
+  fgets(disciplinas[qtd_disciplina].semestre, 8, stdin);
+  limparString(disciplinas[qtd_disciplina].semestre);
+  tam = tamString(disciplinas[qtd_disciplina].semestre);
+  if(tam>6)
     limparBuffer();
-  if(tam>10 || tam<5)
-    professores[qtd_prof].erroData = 1;
+  if(tam!=6)
+    disciplinas[qtd_disciplina].erroSemestre = 1;
 
-  printf("Digite o sexo: ");
-  fgets(professores[qtd_prof].sexo, 3, stdin);
-  limparString(professores[qtd_prof].sexo);
-  tam = tamString(professores[qtd_prof].sexo);
-  if(tam>1)
+  printf("Digite o nome do professor da disciplina: ");
+  fgets(disciplinas[qtd_disciplina].nome_p, 32, stdin);
+  limparString(disciplinas[qtd_disciplina].nome_p);
+  tam = tamString(disciplinas[qtd_disciplina].nome_p);
+  if(tam>30)
   {
-    professores[qtd_prof].erroSexo = 1;
+    disciplinas[qtd_disciplina].erroNome_p = 1;
     limparBuffer();
-  }
+  } else if(tam == 0)
+    disciplinas[qtd_disciplina].erroNome_p = 1;
 
   // Validações
-  if(professores[qtd_prof].erroNome == 0)
-    professores[qtd_prof].erroNome = validarNome(professores[qtd_prof].nome);
-  if(professores[qtd_prof].erroCPF == 0)
-    professores[qtd_prof].erroCPF = validarCPF(professores[qtd_prof].cpf);
-  if(professores[qtd_prof].erroSexo == 0)
-    professores[qtd_prof].erroSexo = validarSexo(professores[qtd_prof].sexo[0]);
-  if(professores[qtd_prof].erroData == 0)
-    professores[qtd_prof].erroData = validarNascimento(professores[qtd_prof].dataNasc);
+  if(disciplinas[qtd_disciplina].erroNome == 0)
+    disciplinas[qtd_disciplina].erroNome = validarNome(disciplinas[qtd_disciplina].nome);
+  if(disciplinas[qtd_disciplina].erroCodigo == 0)
+    disciplinas[qtd_disciplina].erroCodigo = validarCodigo(disciplinas[qtd_disciplina].codigo);
+  if(disciplinas[qtd_disciplina].erroSemestre == 0)
+    disciplinas[qtd_disciplina].erroSemestre = validarSemestre(disciplinas[qtd_disciplina].semestre);
+  //if(disciplinas[qtd_disciplina].erroNome_p == 0)
+    //disciplinas[qtd_disciplina].erroNome_p = validarNascimento(disciplinas[qtd_disciplina].cpf);
 
-  if (professores[qtd_prof].erroNome == 1 || professores[qtd_prof].erroCPF == 1 || professores[qtd_prof].erroSexo == 1 || professores[qtd_prof].erroData)
-    professores[qtd_prof].errou = 1;
+  if (disciplinas[qtd_disciplina].erroNome == 1 || disciplinas[qtd_disciplina].erroCodigo == 1 || disciplinas[qtd_disciplina].erroSemestre == 1 || disciplinas[qtd_disciplina].erroNome_p)
+    disciplinas[qtd_disciplina].errou = 1;
   else
-    professores[qtd_prof].errou = 0;
+    disciplinas[qtd_disciplina].errou = 0;
 
-  if(professores[qtd_prof].errou == 0)
-    qtd_prof++;
-
-  if (professores[qtd_prof].errou == 1) {
-    if (professores[qtd_prof].erroNome == 1)
-      printf("Erro na validação de nome\n");
-    if (professores[qtd_prof].erroCPF == 1)
-      printf("Erro na validação de CPF\n");
-    if (professores[qtd_prof].erroData == 1)
-      printf("Erro na validação de data de nascimento\n");
-    if (professores[qtd_prof].erroSexo == 1)
-      printf("Erro na validação de sexo\n");
-  } else
+  if(disciplinas[qtd_disciplina].errou == 0){
     printf("\nCadastro Realizado com Sucesso\n");
+    qtd_disciplina++;
+  } else{
+    if (disciplinas[qtd_disciplina].erroNome == 1)
+      printf("Erro na validação de nome\n");
+    if (disciplinas[qtd_disciplina].erroCodigo == 1)
+      printf("Erro na validação de Codigo\n");
+    if (disciplinas[qtd_disciplina].erroSemestre == 1)
+      printf("Erro na validação de Semestre\n");
+    if (disciplinas[qtd_disciplina].erroNome_p == 1)
+      printf("Erro na validação de nome de professor\n");
+  }
   
-  return qtd_prof;
+  return qtd_disciplina;
 }
 
-
-void listar(ficha_pessoa pessoas[], int qtd){
+void listar_pessoas(ficha_pessoa pessoas[], int qtd){
   for(int i=0;i<qtd;i++){
     printf("\n\nNome: %s\n", pessoas[i].nome);
     printf("\nData de Nascimento: %s\n", pessoas[i].dataNasc);
@@ -457,13 +490,74 @@ void listar(ficha_pessoa pessoas[], int qtd){
     printf("\nCPF: %s\n\n", pessoas[i].cpf);
   }
 }
+
+void listar_disciplinas(ficha_disciplina disciplinas[], int qtd){
+  for(int i=0;i<qtd;i++){
+    printf("\n\nNome da disciplina: %s\n", disciplinas[i].nome);
+    printf("\nCodigo da disciplina: %s\n", disciplinas[i].codigo);
+    printf("\nSemestre: %s\n", disciplinas[i].semestre);
+    printf("\nNome do Professor: %s\n\n", disciplinas[i].nome_p);
+  }
+}
+
+void transformMaiusculo(char string[]){
+  for(int i=0;string[i]!='\0';i++)
+    if(string[i]>=97 && string[i]<=122)
+      string[i] -= 32;
+}
+
 //****** FUNÇÕES DE VALIDAÇÃO ******
 
-//****** Checa se há caracteres além de letras e espaços na string
+// Checa se há caracteres além de letras e espaços na string
 int validarNome(char validNome[]) {
   for(int i=0;validNome[i]!='\0';i++)
     if(validNome[i]>122 || validNome[i]!=32 && validNome[i]<65)
       return 1;
+
+  return 0;
+}
+
+// Checa se há caracteres além de numeros na matricula
+int validarMatricula(char validMat[]){
+  for(int i=0;validMat[i]!='\0';i++)
+    if(validMat[i]>57 || validMat[i]<48)
+      return 1;
+
+  return 0;
+}
+// Valida se o código está na estrutura correta de Letras e Numeros
+int validarCodigo(char validCod[]){
+  int i;
+
+  transformMaiusculo(validCod);
+  
+  for(i=0;validCod[i]!='\0';i++){
+    if(i<3)
+      if(validCod[i]<65 || validCod[i]>90)
+        return 1;
+    else if(i>=3)
+      if(validCod[i]<48 || validCod[i]>57)
+        return 1;
+  }
+
+  return 0;
+}
+
+//Valida se há apenas numeros no semestre, com exceção do '.' na posição 4 da string
+int validarSemestre(char validSemestre[]){
+  for(int i=0;validSemestre[i]!='\0';i++)
+  {
+    if(i<4){
+      if(validSemestre[i]<48 || validSemestre[i]>57)
+        return 1;
+    } else if(i==4){
+      if(validSemestre[i]!=46)
+        return 1;
+    } else if(i==5){
+      if((validSemestre[i]-48)<1 || (validSemestre[i]-48)>2)
+        return 1;
+    }
+  }
 
   return 0;
 }
@@ -612,6 +706,7 @@ int validarNascimento(char validNasc[]) {
 //****************************************************************************************************
 
 //****** FUNÇÕES AUXILIARES ******
+
 void imprimir_linhas(){
   printf("********************\n");
 }
