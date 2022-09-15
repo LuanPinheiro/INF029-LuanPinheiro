@@ -1,0 +1,2 @@
+int menu_Professores(ficha_pessoa professores[], ficha_pessoa alunos[], int qtd_prof, int qtd_alunos);
+int cadastro_Professores(ficha_pessoa professores[], ficha_pessoa alunos[], int qtd_prof, int qtd_alunos);

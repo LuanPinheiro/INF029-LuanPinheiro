@@ -1,0 +1,10 @@
+int insert_Pessoa(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int qtd, int qtd_repete);
+int exclude_Pessoa(ficha_pessoa pessoa[], int qtd);
+void update_Pessoa(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int qtd, int qtd_repete);
+void listar_pessoas(ficha_pessoa pessoas[], int qtd);
+void lerNome(ficha_pessoa pessoa[], int index);
+void lerCPF(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int qtd, int qtd_repete, int index);
+void lerMatricula(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int qtd, int qtd_repete, int index);
+void lerDataNasc(ficha_pessoa pessoa[], int index);
+void lerSexo(ficha_pessoa pessoa[], int index);
+int pessoaRepetida(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int cod, int qtd, int qtd_repete, int index);

@@ -1,8 +1,8 @@
 /*
 *****Projeto Escola*****
 Funcionalidades feitas:
-Cadastro de Alunos (Matricula, Nome, Data de Nascimento, Sexo, CPF) []
-Cadastro de Professores (Matricula, Nome, Data de Nascimento, Sexo, CPF) []
+Cadastro de Alunos (Matricula, Nome, Data de Nascimento, Sexo, CPF) [X]
+Cadastro de Professores (Matricula, Nome, Data de Nascimento, Sexo, CPF) [X]
 Cadastro de Disciplinas (Nome, Código, Semestre, Professor) []
 Inserir/Excluir aluno em uma disciplina []
 
@@ -29,29 +29,20 @@ Relatórios:
 
 typedef struct{
   char matricula[12];
-  char nome[102];
+  char nome[52];
   char sexo[3];
   char dataNasc[12];
   char cpf[13];
   int cadastrado;
-  int erroNome;
-  int erroCPF;
-  int erroData;
-  int erroSexo;
-  int erroMat;
 }ficha_pessoa;
 
 typedef struct{
-  char nome[102];
+  char nome[52];
   char codigo[8];
   char semestre[8];
-  char nome_p[102];
+  char nome_p[52];
   int alunosMatriculados[vet_size];
-  int erroNome;
-  int erroCodigo;
-  int erroSemestre;
-  int erroNome_p;
-  int errou;
+  int cadastrado;
 }ficha_disciplina;
 
 #include "alunos.h"
@@ -60,9 +51,11 @@ typedef struct{
 #include "validacoes.h"
 #include "gerais.h"
 #include "auxiliares.h"
+#include "leituras.h"
 
 int main(){
-  // Criando um sistema de menu, levando o usuário para setores do sistema, facilitando navegação
+  // Criando um sistema de menu, levando o usuário para setores do sistema, facilitando navegação.
+  // A base do sistema é navegar por submenus, podendo ir e voltar a todo momento, usando a quantidade de alunos, professores e disciplinas como referência de retorno para as funções
   int menu_main;
   
   ficha_pessoa alunos[vet_size];
@@ -88,7 +81,7 @@ int main(){
       case 0: break;
       case 1: qtd_alunos = menu_Alunos(alunos, professores, qtd_alunos, qtd_prof); break;
       case 2: qtd_prof = menu_Professores(professores, alunos, qtd_prof, qtd_alunos); break;
-      case 3: qtd_disciplina = menu_Disciplinas(disciplinas, qtd_disciplina); break;
+      case 3: qtd_disciplina = menu_Disciplinas(disciplinas, alunos, professores, qtd_disciplina, qtd_alunos, qtd_prof); break;
       case 4: break;
       case 5: break;
       default: printf("***ENTRADA INVALIDA***\n\n");

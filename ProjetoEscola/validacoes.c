@@ -3,23 +3,12 @@
 #include <stdbool.h>
 #define vet_size 1000
 
-typedef struct{
-  char matricula[12];
-  char nome[102];
-  char sexo[3];
-  char dataNasc[12];
-  char cpf[13];
-  int cadastrado;
-  int erroNome;
-  int erroCPF;
-  int erroData;
-  int erroSexo;
-  int erroMat;
-}ficha_pessoa;
-
 //****************** Checa se há caracteres além de letras e espaços na string
-int validarNome(char validNome[]) {
-  for(int i=0;validNome[i]!='\0';i++)
+int validarNome(char validNome[]){
+  // checando se o primeiro caracter é um espaço
+  if(validNome[0]==32)
+    return true;
+  else for(int i=0;validNome[i]!='\0';i++)
     if(validNome[i]!=32 && (validNome[i]>90 || validNome[i]<65))
       return true;
 
@@ -203,38 +192,4 @@ int validarNascimento(char validNasc[]) {
   }
 
   return false;
-}
-
-// POR ALGUM MOTIVO NÃO ESTÁ FUNCIONANDO A AVALIAÇÃO ENTRE AS STRUCTS DIFERENTES
-//****************** Checa se há alguma string na struct aluno ou professor, dado um código de qual informação avaliar e o indice na struct a ser checada, retorna 2 caso encontre erro
-int pessoaRepetida(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int cod, int index, int index_repete){
-  int i=0, j=0;
-  
-  // cod 0: CPF / 1: Matricula
-  if(cod==0){
-    // Checando se há CPF igual entre o mesmo tipo. ex: prof-prof, aluno-aluno
-    for(i=0;i<index;i++)
-      for(j=0;pessoa[i].cpf[j]!='\0';j++)
-        if(pessoa[index].cpf[j]!=pessoa[i].cpf[j])
-          return false;
-    // Checando se há CPF igual entre tipos diferentes. ex: prof-aluno, aluno-prof
-    for(i=0;i<index_repete;i++)
-      for(j=0;pessoa_repete[i].cpf[j]!='\0';j++)
-        if(pessoa[index].cpf[j]!=pessoa_repete[i].cpf[j])
-          return false;
-  } 
-  else if(cod==1){
-    // Checando se há Matricula igual entre o mesmo tipo. ex: prof-prof, aluno-aluno
-    for(i=0;i<index;i++)
-      for(j=0;pessoa[i].matricula[j]!='\0';j++)
-        if(pessoa[index].matricula[j]!=pessoa[i].matricula[j])
-          return false;
-    // Checando se há Matricula igual entre tipos diferentes. ex: prof-aluno, aluno-prof
-    for(i=0;i<index_repete;i++)
-      for(j=0;pessoa_repete[i].matricula[j]!='\0';j++)
-        if(pessoa[index].matricula[j]!=pessoa_repete[i].matricula[j])
-          return false;
-  }
-
-  return 2;
 }

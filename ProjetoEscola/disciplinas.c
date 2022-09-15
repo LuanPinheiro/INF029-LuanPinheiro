@@ -10,11 +10,6 @@ typedef struct{
   char dataNasc[12];
   char cpf[13];
   int cadastrado;
-  int erroNome;
-  int erroCPF;
-  int erroData;
-  int erroSexo;
-  int erroMat;
 }ficha_pessoa;
 
 typedef struct{
@@ -23,21 +18,17 @@ typedef struct{
   char semestre[8];
   char nome_p[52];
   int alunosMatriculados[vet_size];
-  int erroNome;
-  int erroCodigo;
-  int erroSemestre;
-  int erroNome_p;
-  int errou;
+  int cadastrado;
 }ficha_disciplina;
 
 //****************** Menu das disciplinas, redireciona para todas as funções de cadastro e relatório de disciplinas
-int menu_Disciplinas(ficha_disciplina disciplinas[], int qtd_disciplina){
+int menu_Disciplinas(ficha_disciplina disciplinas[], ficha_pessoa alunos[], ficha_pessoa professores[], int qtd_disciplina, int qtd_alunos, int qtd_prof){
   int menu_disciplina;
 
   do{
     limparTela();
     imprimir_linhas();
-    printf("\nMENU DISCIPLINAS:\n");
+    printf("\nMENU DISCIPLINAS\n\n");
     printf("1. Cadastrar Disciplina\n2. Listar Disciplinas\n3. Listar 1 Disciplina\n4. Disciplinas com mais de 40 matriculas\n5. Inserir Aluno em uma Disciplina\n6. Excluir Aluno em uma Disciplina\n");
     printf("(Digite 0 para retornar ao menu anterior)\n\n");
     
@@ -46,7 +37,7 @@ int menu_Disciplinas(ficha_disciplina disciplinas[], int qtd_disciplina){
 
     switch(menu_disciplina){
       case 0: break;
-      case 1: qtd_disciplina = cadastro_Disciplinas(disciplinas, qtd_disciplina); break;
+      case 1: qtd_disciplina = cadastro_Disciplinas(disciplinas, professores, qtd_disciplina, qtd_prof); break;
       case 2: if(qtd_disciplina>0)
         listar_disciplinas(disciplinas, qtd_disciplina);
         else
@@ -63,13 +54,13 @@ int menu_Disciplinas(ficha_disciplina disciplinas[], int qtd_disciplina){
 }
 
 //****************** Menu que direciona para as funções de cadastro de disciplinas
-int cadastro_Disciplinas(ficha_disciplina disciplinas[], int qtd_disciplina){
+int cadastro_Disciplinas(ficha_disciplina disciplinas[], ficha_pessoa professores[], int qtd_disciplina, int qtd_prof){
   int menu_cadDisciplina;
 
   do{
     limparTela();
     imprimir_linhas();
-    printf("\nCADASTRO DE DISCIPLINAS:\n");
+    printf("\nCADASTRO DE DISCIPLINAS\n\n");
     printf("1. Cadastrar Nova Disciplina\n2. Excluir Disciplina\n3. Atualizar Cadastro de Disciplina\n");
     printf("(Digite 0 para retornar ao menu anterior)\n\n");
     
@@ -78,8 +69,14 @@ int cadastro_Disciplinas(ficha_disciplina disciplinas[], int qtd_disciplina){
 
     switch(menu_cadDisciplina){
       case 0: break;
-      case 1: qtd_disciplina = insert_Disciplina(disciplinas, qtd_disciplina); break;
-      case 2: break;
+      case 1: if(qtd_prof>0)
+        qtd_disciplina = insert_Disciplina(disciplinas, professores, qtd_disciplina, qtd_prof);
+        else
+          printf("***NAO HA PROFESSORES CADASTRADOS***\n\n"); break;
+      case 2: if(qtd_disciplina>0)
+        qtd_disciplina = exclude_Disciplina(disciplinas, qtd_disciplina);
+        else
+          printf("***NAO HA DISCIPLINAS CADASTRADAS***\n\n"); break;
       case 3: break;
       default:  printf("***ENTRADA INVALIDA***\n\n");
       }
@@ -89,97 +86,91 @@ int cadastro_Disciplinas(ficha_disciplina disciplinas[], int qtd_disciplina){
 }
 
 //****************** Função de cadastrar uma nova disciplina, com validações para cada entrada
-int insert_Disciplina(ficha_disciplina disciplinas[], int qtd_disciplina){
+int insert_Disciplina(ficha_disciplina disciplinas[], ficha_pessoa professores[], int qtd_disciplina, int qtd_prof){
   
   limparTela();
-  disciplinas[qtd_disciplina].erroNome = false;
-  disciplinas[qtd_disciplina].erroCodigo = false;
-  disciplinas[qtd_disciplina].erroSemestre = false;
-  disciplinas[qtd_disciplina].erroNome_p = false;
-
-  int tam;
-
-  //Todas as entradas já são validadas por tamanho antes de fazer as validações mais complexas
-  printf("Digite o nome da disciplina: ");
-  fgets(disciplinas[qtd_disciplina].nome, 52, stdin);
-  limparString(disciplinas[qtd_disciplina].nome);
-  tam = tamString(disciplinas[qtd_disciplina].nome);
-  if(tam>50){
-    disciplinas[qtd_disciplina].erroNome = true;
-    limparBuffer();
-  } else if(tam<3)
-    disciplinas[qtd_disciplina].erroNome = true;
-  else
-    transformMaiusculo(disciplinas[qtd_disciplina].nome);
-
-  printf("Digite o codigo da disciplina: ");
-  fgets(disciplinas[qtd_disciplina].codigo, 8, stdin);
-  limparString(disciplinas[qtd_disciplina].codigo);
-  tam = tamString(disciplinas[qtd_disciplina].codigo);
-  if(tam>6)
-    limparBuffer();
-  if(tam!=6)
-    disciplinas[qtd_disciplina].erroCodigo = true;
-  disciplinas[qtd_disciplina].erroCodigo = codigoRepetido(disciplinas, qtd_disciplina);
   
-  printf("Digite o semestre da disciplina: ");
-  fgets(disciplinas[qtd_disciplina].semestre, 8, stdin);
-  limparString(disciplinas[qtd_disciplina].semestre);
-  tam = tamString(disciplinas[qtd_disciplina].semestre);
-  if(tam>6)
-    limparBuffer();
-  if(tam!=6)
-    disciplinas[qtd_disciplina].erroSemestre = true;
+  // Todas as entradas já são validadas em suas respectivas funções
+  lerNomeDisc(disciplinas, qtd_disciplina);
+  lerCodigoDisc(disciplinas, qtd_disciplina);
+  lerSemestreDisc(disciplinas, qtd_disciplina);
+  ProfessorDisc(disciplinas, professores, qtd_disciplina, qtd_prof);
 
-  printf("Digite o nome do professor da disciplina: ");
-  fgets(disciplinas[qtd_disciplina].nome_p, 52, stdin);
-  limparString(disciplinas[qtd_disciplina].nome_p);
-  tam = tamString(disciplinas[qtd_disciplina].nome_p);
-  if(tam>50){
-    disciplinas[qtd_disciplina].erroNome_p = true;
-    limparBuffer();
-  } else if(tam<3)
-    disciplinas[qtd_disciplina].erroNome_p = true;
-
-  // Validações
-  if(disciplinas[qtd_disciplina].erroNome == false)
-    disciplinas[qtd_disciplina].erroNome = validarNome(disciplinas[qtd_disciplina].nome);
-  if(disciplinas[qtd_disciplina].erroCodigo == false)
-    disciplinas[qtd_disciplina].erroCodigo = validarCodigo(disciplinas[qtd_disciplina].codigo);
-  if(disciplinas[qtd_disciplina].erroSemestre == false)
-    disciplinas[qtd_disciplina].erroSemestre = validarSemestre(disciplinas[qtd_disciplina].semestre);
-  //if(disciplinas[qtd_disciplina].erroNome_p == 0)
-    //disciplinas[qtd_disciplina].erroNome_p = validarNascimento(disciplinas[qtd_disciplina].cpf);
-
-  if (disciplinas[qtd_disciplina].erroNome == true || disciplinas[qtd_disciplina].erroCodigo != false || disciplinas[qtd_disciplina].erroSemestre == true || disciplinas[qtd_disciplina].erroNome_p)
-    disciplinas[qtd_disciplina].errou = true;
-  else
-    disciplinas[qtd_disciplina].errou = false;
-
-  if(disciplinas[qtd_disciplina].errou == false){
-    printf("\nCadastro Realizado com Sucesso\n");
-    qtd_disciplina++;
-  } else{
-    if (disciplinas[qtd_disciplina].erroNome == true)
-      printf("Erro na validação de nome\n");
-    
-    if (disciplinas[qtd_disciplina].erroCodigo == true)
-      printf("Erro na validação de Codigo\n");
-    else if (disciplinas[qtd_disciplina].erroCodigo == 2)
-      printf("Erro na validação de Codigo - CODIGO REPETIDO\n");
-    
-    if (disciplinas[qtd_disciplina].erroSemestre == true)
-      printf("Erro na validação de Semestre\n");
-    
-    if (disciplinas[qtd_disciplina].erroNome_p == true)
-      printf("Erro na validação de nome de professor\n");
-  }
+  // Confirmando um novo cadastro
+  disciplinas[qtd_disciplina].cadastrado = true;
+  qtd_disciplina++;
+  printf("\nCadastro Realizado com Sucesso\n");
+  
   
   return qtd_disciplina;
 }
 
-//****************** Checa se há algum código de disciplina repetido em outra disciplina já cadastrada, retorna 2 caso encontre alguma igual
-int codigoRepetido(ficha_disciplina disciplina[], int index){
+//****************** Função que adiciona um professor a disciplina, aparece a lista de professores e o usuário deve escolher um professor válido
+void ProfessorDisc(ficha_disciplina disciplinas[], ficha_pessoa professores[], int index, int qtd_prof){
+  int op, i=0, count=0;
+
+  // Printa os professores cadastrados
+  printf("\n\n");
+  listar_pessoas(professores, qtd_prof);
+
+  // Escolhendo um professor válido
+  do{
+    printf("Digite o #numero do professor para a disciplina %s: ", disciplinas[index].codigo);
+    scanf("%d", &op);
+    getchar();
+    
+    if(op<1 || op>qtd_prof)
+      printf("\n***ENTRADA INVALIDA***\n");
+  }while(op<1 || op>qtd_prof);
+  
+  // Achando o índice correto para passar o nome
+  while(count!=op){
+      if(professores[i].cadastrado==true)
+        count++;
+      i++;
+    }
+  
+  // Passando o nome do professor para a struct de disciplinas
+  strcpy(disciplinas[index].nome_p, professores[i-1].nome);
+}
+
+//****************** Função que faz exclusão lógica de uma pessoa, através da modificação de uma variavel que funciona como uma flag se a pessoa está cadastrado ou não. E diminui o contador de pessoas cadastradas
+int exclude_Disciplina(ficha_disciplina disciplinas[], int qtd){
+  int op;
+  int i=0, count=0;
+
+  do{
+    limparTela();
+    listar_disciplinas(disciplinas, qtd);
+    printf("(Digite 0 para voltar)\n");
+    printf("Digite o #numero da disciplina que quer excluir: ");
+    scanf("%d", &op);
+    getchar();
+    
+    if(op<0 || op>qtd)
+      printf("\n***ENTRADA INVALIDA***\n");
+  }while(op<0 || op>qtd);
+
+  if(op==0){
+    printf("\n***VOLTANDO***\n");
+  }
+  else{
+    while(count!=op){
+      if(disciplinas[i].cadastrado==true)
+        count++;
+      i++;
+    }
+    disciplinas[i-1].cadastrado=false;
+    qtd--;
+
+    printf("\n***DISCIPLINA #%d EXCLUIDA***\n", op);
+  }
+
+  return qtd;
+}
+
+//****************** SE DER TEMPO IMPLEMENTAR ESSA FUNÇÃO CORRIGIDA - Checa se há algum código de disciplina repetido em outra disciplina já cadastrada, retorna 2 caso encontre alguma igual
+/*int codigoRepetido(ficha_disciplina disciplina[], int index){
   int repetido = false;
 
   transformMaiusculo(disciplina[index].codigo);
@@ -195,15 +186,20 @@ int codigoRepetido(ficha_disciplina disciplina[], int index){
   }
 
   return repetido;
-}
+}*/
 
 //****************** Lista as disciplinas na ordem q foram cadastradas
 void listar_disciplinas(ficha_disciplina disciplinas[], int qtd){
-  for(int i=0;i<qtd;i++){
-    printf("\n\n******#%d\n", i);
-    printf("\nNome da disciplina: %s\n", disciplinas[i].nome);
-    printf("\nCodigo da disciplina: %s\n", disciplinas[i].codigo);
-    printf("\nSemestre: %s\n", disciplinas[i].semestre);
-    printf("\nNome do Professor: %s\n\n", disciplinas[i].nome_p);
-  }
+  int count;
+  for(int i=0, count=0;count<qtd;i++)
+    if(disciplinas[i].cadastrado==true)
+    {
+      printf("\n\n******#%d\n", count+1);
+      printf("\nNome da disciplina: %s\n", disciplinas[i].nome);
+      printf("\nCodigo da disciplina: %s\n", disciplinas[i].codigo);
+      printf("\nSemestre: %s\n", disciplinas[i].semestre);
+      printf("\nNome do Professor: %s\n\n", disciplinas[i].nome_p);
+
+      count++;
+    }
 }

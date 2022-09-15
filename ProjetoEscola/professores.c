@@ -10,11 +10,6 @@ typedef struct{
   char dataNasc[12];
   char cpf[13];
   int cadastrado;
-  int erroNome;
-  int erroCPF;
-  int erroData;
-  int erroSexo;
-  int erroMat;
 }ficha_pessoa;
 
 typedef struct{
@@ -23,11 +18,7 @@ typedef struct{
   char semestre[8];
   char nome_p[52];
   int alunosMatriculados[vet_size];
-  int erroNome;
-  int erroCodigo;
-  int erroSemestre;
-  int erroNome_p;
-  int errou;
+  int cadastrado;
 }ficha_disciplina;
 
 // Menu dos professores, redireciona para todas as funções de cadastro e relatório de professores
@@ -37,7 +28,7 @@ int menu_Professores(ficha_pessoa professores[], ficha_pessoa alunos[], int qtd_
   do{
     limparTela();
     imprimir_linhas();
-    printf("\nMENU PROFESSORES:\n");
+    printf("\nMENU PROFESSORES\n\n");
     printf("1. Cadastrar Professor\n2. Listar Professores\n3. Listar Professores por Sexo\n4. Listar Professores por Nome\n5. Listar Professores por Data de Nascimento\n");
     printf("(Digite 0 para retornar ao menu anterior)\n\n");
     
@@ -68,7 +59,7 @@ int cadastro_Professores(ficha_pessoa professores[], ficha_pessoa alunos[], int 
   do{
     limparTela();
     imprimir_linhas();
-    printf("\nCADASTRO DE PROFESSORES:\n");
+    printf("\nCADASTRO DE PROFESSORES\n\n");
     printf("1. Cadastrar Novo Professor\n2. Excluir Professor\n3. Atualizar Cadastro de Professor\n");
     printf("(Digite 0 para retornar ao menu anterior)\n\n");
     

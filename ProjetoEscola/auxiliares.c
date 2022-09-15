@@ -10,11 +10,6 @@ typedef struct{
   char dataNasc[12];
   char cpf[13];
   int cadastrado;
-  int erroNome;
-  int erroCPF;
-  int erroData;
-  int erroSexo;
-  int erroMat;
 }ficha_pessoa;
 
 typedef struct{
@@ -23,11 +18,7 @@ typedef struct{
   char semestre[8];
   char nome_p[52];
   int alunosMatriculados[vet_size];
-  int erroNome;
-  int erroCodigo;
-  int erroSemestre;
-  int erroNome_p;
-  int errou;
+  int cadastrado;
 }ficha_disciplina;
 
 //****************** Se houver letras minusculas transformará em maiuscula para padronização do modelo das strings
