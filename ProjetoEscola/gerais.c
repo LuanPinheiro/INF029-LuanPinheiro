@@ -120,28 +120,56 @@ void update_Pessoa(ficha_pessoa pessoa[], int qtd){
 }
 
 void aniversariantes (ficha_pessoa alunos[], ficha_pessoa professores[], int qtd_alunos, int qtd_prof){
-  int i, count, count2, mes;
+  int i, count, count2, mes, mesPessoa;
   
   limparTela();
-  
+
   do{
     printf("Digite o mês atual: ");
     scanf("%d",&mes);
+    getchar();
     if(mes<1 || mes>12)
       printf("\n***ENTRADA INVALIDA***\n");
   }while(mes<1 || mes>12);
-  
-  /*for(i=0, count=0;count<qtd_alunos;i++)
+
+  printf("\n***ALUNOS***\n\n");
+  for(i=0, count=0, count2=0;count<qtd_alunos;i++){
     if(alunos[i].cadastrado==true){
-      printf("******#%d\n", count+1);
-      printf("\nNome: %s\n", alunos[i].nome);
-      printf("\nCPF: %s\n", alunos[i].cpf);
-      printf("\nMatricula: %s\n", alunos[i].matricula);
-      printf("\nData de Nascimento: %s\n", alunos[i].dataNasc);
-      printf("\nSexo: %c\n\n", alunos[i].sexo[0]);
-  
+      mesPessoa = mesInt(alunos[i].dataNasc);
+      if(mesPessoa==mes){
+        printf("******#%d\n", count2+1);
+        printf("\nNome: %s\n", alunos[i].nome);
+        printf("\nCPF: %s\n", alunos[i].cpf);
+        printf("\nMatricula: %s\n", alunos[i].matricula);
+        printf("\nData de Nascimento: %s\n", alunos[i].dataNasc);
+        printf("\nSexo: %c\n\n", alunos[i].sexo[0]);
+        count2++;
+      }
       count++;
-    }*/
+    }
+  }
+  if(count2==0)
+    printf("\n***NAO HA ALUNOS QUE FAZEM ANIVERSARIO ESTE MES***\n");
+
+  printf("\n***PROFESSORES***\n\n");
+  for(i=0, count=0, count2=0;count<qtd_prof;i++){
+    if(professores[i].cadastrado==true){
+      mesPessoa = mesInt(professores[i].dataNasc);
+      if(mesPessoa==mes){
+        printf("******#%d\n", count2+1);
+        printf("\nNome: %s\n", professores[i].nome);
+        printf("\nCPF: %s\n", professores[i].cpf);
+        printf("\nMatricula: %s\n", professores[i].matricula);
+        printf("\nData de Nascimento: %s\n", professores[i].dataNasc);
+        printf("\nSexo: %c\n\n", professores[i].sexo[0]);
+        count2++;
+      }
+      count++;
+    }
+  }
+  if(count2==0)
+    printf("\n***NAO HA PROFESSORES QUE FAZEM ANIVERSARIO ESTE MES***\n");
+    
 }
 
 //****************** SE DER TEMPO IMPLEMENTAR ESSE FUNÇÃO CORRIGIDA- Checa se há alguma string na struct aluno ou professor, dado um código de qual informação avaliar e o indice na struct a ser checada, retorna 2 caso encontre erro

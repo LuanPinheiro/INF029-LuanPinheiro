@@ -109,3 +109,35 @@ int checkMatriculado(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int 
 
   return retorno;
 }
+
+// Função que retorna o mês em inteiro dada a string de data
+int mesInt (char validNasc[]){
+  int identificador=0;
+  int mes, str_count=0;
+  
+  for(int i=0;validNasc[i]!='\0';i++){ 
+    if(validNasc[i] == '/'){
+      if(identificador == 2)
+        return false;
+      else if(str_count == 0 || str_count > 2)
+        return false;
+      else if(identificador == 0)
+          identificador++;
+        else if(str_count == 2){
+            if(identificador == 1){
+              mes = ((validNasc[i-2] - 48) * 10) + (validNasc[i-1] - 48);
+              return mes;
+            }
+        }
+        else if (identificador == 1){
+          mes = validNasc[i-1] - 48;
+          return mes;
+        }
+      str_count = 0;
+    }
+    else
+      str_count++;
+  }
+
+  return false;
+}
