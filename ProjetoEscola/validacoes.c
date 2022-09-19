@@ -106,7 +106,7 @@ int validarCPF(char validCPF[]) {
 
 //****************** Checa se o caracter é uma das entradas de sexo válidas
 int validarSexo(char validSexo) {
-  char valid[] = {'f', 'F', 'm', 'M', 'o', 'O'};
+  char valid[] = {'F', 'M', 'O'};
   int i;
   
   for (i=0;valid[i]!='\0';i++)

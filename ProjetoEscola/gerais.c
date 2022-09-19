@@ -19,18 +19,19 @@ typedef struct{
   char semestre[8];
   char nome_p[52];
   int alunosMatriculados[vet_size];
+  int qtdMat;
   int cadastrado;
 }ficha_disciplina;
 
 //****************** Função de cadastrar uma nova pessoa(aluno ou professor), com validações para cada entrada
-int insert_Pessoa(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int qtd, int qtd_repete){
+int insert_Pessoa(ficha_pessoa pessoa[], int qtd){
   
   limparTela();
 
   //Todas as entradas são validadas em suas respectivas funções
   lerNome(pessoa, qtd);
-  lerCPF(pessoa, pessoa_repete, qtd, qtd_repete, qtd);
-  lerMatricula(pessoa, pessoa_repete, qtd, qtd_repete, qtd);
+  lerCPF(pessoa, qtd);
+  lerMatricula(pessoa, qtd);
   lerDataNasc(pessoa, qtd);
   lerSexo(pessoa, qtd);
 
@@ -44,8 +45,7 @@ int insert_Pessoa(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int qtd, 
 
 //****************** Função que faz exclusão lógica de uma pessoa, através da modificação de uma variavel que funciona como uma flag se a pessoa está cadastrado ou não. E diminui o contador de pessoas cadastradas
 int exclude_Pessoa(ficha_pessoa pessoa[], int qtd){
-  int op;
-  int i=0, count=0;
+  int op, i;
 
   do{
     limparTela();
@@ -63,12 +63,8 @@ int exclude_Pessoa(ficha_pessoa pessoa[], int qtd){
     printf("\n***VOLTANDO***\n");
   }
   else{
-    while(count!=op){
-      if(pessoa[i].cadastrado==true)
-        count++;
-      i++;
-    }
-    pessoa[i-1].cadastrado=false;
+    i = trueIndexPessoa(op, pessoa);
+    pessoa[i].cadastrado=false;
     qtd--;
 
     printf("\n***PESSOA #%d EXCLUIDA***\n", op);
@@ -78,8 +74,8 @@ int exclude_Pessoa(ficha_pessoa pessoa[], int qtd){
 }
 
 //****************** Função que modifica o cadastro de uma pessoa, recebe um segundo vetor de struct para checar repetições em alunos e professores
-void update_Pessoa(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int qtd, int qtd_repete){
-  int op, op2, i, count;
+void update_Pessoa(ficha_pessoa pessoa[], int qtd){
+  int op, op2, i;
 
   do{
     limparTela();
@@ -99,27 +95,21 @@ void update_Pessoa(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int qtd,
       imprimir_linhas();
       printf("\nDigite o que deseja alterar:\n");
       printf("1. Nome\n2. CPF\n3. Matricula \n4. Data de Nascimento\n5. Sexo\n");
-      printf("(Digite 0 para retornar ao menu anterior)\n\n");
+      printf("(Digite 0 para retornar ao menu de cadastro)\n\n");
       
       scanf("%d", &op2);
       getchar();
 
       if(op2!=0){
         // Encontrando o índice correto para alterar os dados
-        i = 0;
-        count = 0;
-        while(count!=op){
-          if(pessoa[i].cadastrado==true)
-            count++;
-          i++;
-        }
+        i = 0;trueIndexPessoa(op, pessoa);
         // Realizando as alterações diferentes para cada entrada no menu
         switch(op2){
-          case 1: lerNome(pessoa, i-1); break;
-          case 2: lerCPF(pessoa, pessoa_repete, qtd, qtd_repete, i-1); break;
-          case 3: lerMatricula(pessoa, pessoa_repete, qtd, qtd_repete, i-1); break;
-          case 4: lerDataNasc(pessoa, i-1); break;
-          case 5: lerSexo(pessoa, i-1); break;
+          case 1: lerNome(pessoa, i); break;
+          case 2: lerCPF(pessoa, i); break;
+          case 3: lerMatricula(pessoa, i); break;
+          case 4: lerDataNasc(pessoa, i); break;
+          case 5: lerSexo(pessoa, i); break;
           default: printf("***ENTRADA INVALIDA***\n\n");
         }
       }
@@ -129,24 +119,33 @@ void update_Pessoa(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int qtd,
   }
 }
 
-//****************** Função que lista pessoas na ordem que foram cadastradas
-void listar_pessoas(ficha_pessoa pessoas[], int qtd){
-  int count;
-  for(int i=0, count=0;count<qtd;i++)
-    if(pessoas[i].cadastrado==true){
+void aniversariantes (ficha_pessoa alunos[], ficha_pessoa professores[], int qtd_alunos, int qtd_prof){
+  int i, count, count2, mes;
+  
+  limparTela();
+  
+  do{
+    printf("Digite o mês atual: ");
+    scanf("%d",&mes);
+    if(mes<1 || mes>12)
+      printf("\n***ENTRADA INVALIDA***\n");
+  }while(mes<1 || mes>12);
+  
+  /*for(i=0, count=0;count<qtd_alunos;i++)
+    if(alunos[i].cadastrado==true){
       printf("******#%d\n", count+1);
-      printf("\nNome: %s\n", pessoas[i].nome);
-      printf("\nCPF: %s\n", pessoas[i].cpf);
-      printf("\nMatricula: %s\n", pessoas[i].matricula);
-      printf("\nData de Nascimento: %s\n", pessoas[i].dataNasc);
-      printf("\nSexo: %c\n\n", pessoas[i].sexo[0]);
+      printf("\nNome: %s\n", alunos[i].nome);
+      printf("\nCPF: %s\n", alunos[i].cpf);
+      printf("\nMatricula: %s\n", alunos[i].matricula);
+      printf("\nData de Nascimento: %s\n", alunos[i].dataNasc);
+      printf("\nSexo: %c\n\n", alunos[i].sexo[0]);
   
       count++;
-    }
+    }*/
 }
 
 //****************** SE DER TEMPO IMPLEMENTAR ESSE FUNÇÃO CORRIGIDA- Checa se há alguma string na struct aluno ou professor, dado um código de qual informação avaliar e o indice na struct a ser checada, retorna 2 caso encontre erro
-int pessoaRepetida(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int cod, int qtd, int qtd_repete, int index){
+/*int pessoaRepetida(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int cod, int qtd, int qtd_repete, int index){
   int i=0, j=0, repetido;
 
   // cod 0: CPF / 1: Matricula
@@ -186,4 +185,4 @@ int pessoaRepetida(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int cod,
   }
 
   return repetido;
-}
+}*/

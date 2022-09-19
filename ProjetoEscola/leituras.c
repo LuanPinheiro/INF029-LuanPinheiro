@@ -18,6 +18,7 @@ typedef struct{
   char semestre[8];
   char nome_p[52];
   int alunosMatriculados[vet_size];
+  int qtdMat;
   int cadastrado;
 }ficha_disciplina;
 
@@ -49,7 +50,7 @@ void lerNome(ficha_pessoa pessoa[], int index){
 }
 
 //****************** Função de leitura de CPF, recebe o vetor de struct e a posição que deve ler do usuário o CPF
-void lerCPF(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int qtd, int qtd_repete, int index){
+void lerCPF(ficha_pessoa pessoa[], int index){
   int tam, erro;
   
   do{
@@ -77,7 +78,7 @@ void lerCPF(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int qtd, int qt
 }
 
 //****************** Função de leitura de Matricula, recebe o vetor de struct e a posição que deve ler do usuário a Matricula, além dos paramêtros para comparação da struct diferente, e checa se há Matricula repetida entre professores e alunos (ex: se ler dado de aluno, recebe também de professor para buscar se está repetido)
-void lerMatricula(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int qtd, int qtd_repete, int index){
+void lerMatricula(ficha_pessoa pessoa[], int index){
   int tam, erro;
   
   do{
@@ -143,8 +144,10 @@ void lerSexo(ficha_pessoa pessoa[], int index){
       if(tam>1)
         limparBuffer();
     }
-    else
+    else{
+      transformMaiusculo(pessoa[index].sexo);
       erro = validarSexo(pessoa[index].sexo[0]);
+    }
 
     if(erro==true)
       printf("***ENTRADA INVALIDA***\n");

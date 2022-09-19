@@ -18,6 +18,7 @@ typedef struct{
   char semestre[8];
   char nome_p[52];
   int alunosMatriculados[vet_size];
+  int qtdMat;
   int cadastrado;
 }ficha_disciplina;
 
@@ -62,4 +63,49 @@ int tamString(char string[]){
     i++;
   
   return i;
+}
+
+//****************** Para leituras de menu com vetores sem shift após exclusão, retorna a posição real no vetor para alteração dos dados
+int trueIndexPessoa(int input, ficha_pessoa pessoa[]){
+  int count=0, i=0;
+  
+  while(count!=input){
+    if(pessoa[i].cadastrado==true)
+      count++;
+    i++;
+  }
+  i--;
+    
+  return i;
+}
+
+//****************** Para leituras de menu com vetores sem shift após exclusão, retorna a posição real no vetor para alteração dos dados
+int trueIndexDisciplina(int input, ficha_disciplina disciplinas[]){
+  int count=0, i=0;
+  
+  while(count!=input){
+    if(disciplinas[i].cadastrado==true)
+      count++;
+    i++;
+  }
+  i--;
+    
+  return i;
+}
+
+//****************** Busca se o aluno está matriculado na disciplina, retorna true se achar o aluno na matricula
+int checkMatriculado(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int index_disc, int index_alunos){
+  int retorno = false;
+  for(int i=0, count=0;count<disciplinas[index_disc].qtdMat;i++){
+    if(disciplinas[index_disc].alunosMatriculados[i]!=-1){
+      if(disciplinas[index_disc].alunosMatriculados[i]==index_alunos){
+        retorno = true;
+        break;
+      }
+      count++;
+    }
+  }
+
+
+  return retorno;
 }

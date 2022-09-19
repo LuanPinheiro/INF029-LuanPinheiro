@@ -18,18 +18,19 @@ typedef struct{
   char semestre[8];
   char nome_p[52];
   int alunosMatriculados[vet_size];
+  int qtdMat;
   int cadastrado;
 }ficha_disciplina;
 
 //****************** Menu dos alunos, redireciona para todas as funções de cadastro e relatório de alunos
-int menu_Alunos(ficha_pessoa alunos[], ficha_pessoa professores[], int qtd_alunos, int qtd_prof){
+int menu_Alunos(ficha_pessoa alunos[], int qtd_alunos){
   int menu_alunos;
 
   do{
     limparTela();
     imprimir_linhas();
     printf("\nMENU ALUNOS\n\n");
-    printf("1. Cadastrar Aluno\n2. Listar Alunos\n3. Listar Alunos por Sexo\n4. Listar Alunos por Nome\n5. Listar Alunos por Data de Nascimento\n6. Alunos Matriculados em Menos de 3 Disciplinas\n");
+    printf("1. Cadastro de Aluno\n2. Listar Alunos\n3. Listar Alunos por Sexo\n4. Listar Alunos por Nome\n5. Listar Alunos por Data de Nascimento\n6. Alunos Matriculados em Menos de 3 Disciplinas\n");
     printf("(Digite 0 para retornar ao menu anterior)\n\n");
     
     scanf("%d", &menu_alunos);
@@ -37,12 +38,15 @@ int menu_Alunos(ficha_pessoa alunos[], ficha_pessoa professores[], int qtd_aluno
 
     switch(menu_alunos){
       case 0: break;
-      case 1: qtd_alunos = cadastro_Alunos(alunos, professores, qtd_alunos, qtd_prof); break;
+      case 1: qtd_alunos = cadastro_Alunos(alunos, qtd_alunos); break;
       case 2: if(qtd_alunos>0)
         listar_pessoas(alunos, qtd_alunos);
         else
           printf("***NAO HA ALUNOS CADASTRADOS***\n\n"); break;
-      case 3: break;
+      case 3: if(qtd_alunos>0)
+        listar_pessoas_sexo(alunos, qtd_alunos);
+        else
+          printf("***NAO HA ALUNOS CADASTRADOS***\n\n"); break;
       case 4: break;
       case 5: break;
       case 6: break;
@@ -54,7 +58,7 @@ int menu_Alunos(ficha_pessoa alunos[], ficha_pessoa professores[], int qtd_aluno
 }
 
 //****************** Menu que direciona para as funções de cadastro de alunos
-int cadastro_Alunos(ficha_pessoa alunos[], ficha_pessoa professores[], int qtd_alunos, int qtd_prof){
+int cadastro_Alunos(ficha_pessoa alunos[], int qtd_alunos){
   int menu_cadAluno;
 
   do{
@@ -69,13 +73,13 @@ int cadastro_Alunos(ficha_pessoa alunos[], ficha_pessoa professores[], int qtd_a
 
     switch(menu_cadAluno){
       case 0: break;
-      case 1: qtd_alunos = insert_Pessoa(alunos, professores, qtd_alunos, qtd_prof); break;
+      case 1: qtd_alunos = insert_Pessoa(alunos,qtd_alunos); break;
       case 2: if(qtd_alunos>0)
         qtd_alunos = exclude_Pessoa(alunos, qtd_alunos);
         else
           printf("***NAO HA ALUNOS CADASTRADOS***\n\n"); break;
       case 3: if(qtd_alunos>0)
-        update_Pessoa(alunos, professores, qtd_alunos, qtd_prof);
+        update_Pessoa(alunos, qtd_alunos);
         else
           printf("***NAO HA ALUNOS CADASTRADOS***\n\n"); break;
       default: printf("***ENTRADA INVALIDA***\n\n");
