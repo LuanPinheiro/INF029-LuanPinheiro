@@ -1,6 +1,5 @@
 void lerNome(ficha_pessoa pessoa[], int index);
 void lerCPF(ficha_pessoa pessoa[], int index);
-void lerMatricula(ficha_pessoa pessoa[], int index);
 void lerDataNasc(ficha_pessoa pessoa[], int index);
 void lerSexo(ficha_pessoa pessoa[], int index);
 void lerNomeDisc(ficha_disciplina disciplinas[], int index);

@@ -4,7 +4,7 @@
 #define vet_size 1000
 
 typedef struct{
-  char matricula[12];
+  int matricula;;
   char nome[52];
   char sexo[3];
   char dataNasc[12];
@@ -75,33 +75,6 @@ void lerCPF(ficha_pessoa pessoa[], int index){
     if(erro==true)
       printf("***ENTRADA INVALIDA***\n");
   }while(erro!=false);
-}
-
-//****************** Função de leitura de Matricula, recebe o vetor de struct e a posição que deve ler do usuário a Matricula, além dos paramêtros para comparação da struct diferente, e checa se há Matricula repetida entre professores e alunos (ex: se ler dado de aluno, recebe também de professor para buscar se está repetido)
-void lerMatricula(ficha_pessoa pessoa[], int index){
-  int tam, erro;
-  
-  do{
-    erro = false;
-
-    printf("Digite a Matricula: ");
-    fgets(pessoa[index].matricula, 12, stdin);
-    limparString(pessoa[index].matricula);
-    tam = tamString(pessoa[index].matricula);
-    if(tam!=10){
-      erro = true;
-      if(tam>10)
-        limparBuffer();
-    }
-    /*else if(qtd>0 || qtd_repete>0)
-      pessoa[index].erroMat = pessoaRepetida(pessoa, pessoa_repete, 1, qtd, qtd_repete, index);*/
-  
-    if(erro == false)
-      erro = validarMatricula(pessoa[index].matricula);
-
-    if(erro==true)
-      printf("***ENTRADA INVALIDA***\n");
-  }while(erro==true);
 }
 
 //****************** Função de leitura de Data de Nascimento, recebe o vetor de struct e a posição que deve ler do usuário a Data

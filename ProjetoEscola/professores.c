@@ -4,7 +4,7 @@
 #define vet_size 1000
 
 typedef struct{
-  char matricula[12];
+  int matricula;
   char nome[52];
   char sexo[3];
   char dataNasc[12];

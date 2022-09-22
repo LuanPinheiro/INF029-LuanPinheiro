@@ -4,7 +4,7 @@ Funcionalidades feitas:
 Cadastro de Alunos (Matricula, Nome, Data de Nascimento, Sexo, CPF) [X]
 Cadastro de Professores (Matricula, Nome, Data de Nascimento, Sexo, CPF) [X]
 Cadastro de Disciplinas (Nome, Código, Semestre, Professor) [X]
-Inserir/Excluir aluno em uma disciplina []
+Inserir/Excluir aluno em uma disciplina [X]
 
 Relatórios:
   Listar Alunos [X]
@@ -17,12 +17,13 @@ Relatórios:
   Listar Professores por Sexo [X]
   Listar Professores por Nome []
   Listar Professores por data de nascimento []
-  Aniversariantes do mês []
+  Aniversariantes do mês [X]
   Lista de pessoas(Professores e Alunos) a partir de uma string de busca de no minimo 3 caracteres [X]
-  Lista de Alunos matriculados em menos de 3 disciplinas []
-  Lista de Disciplinas, com nome do professor, que extrapolam 40 vagas []
+  Lista de Alunos matriculados em menos de 3 disciplinas [X]
+  Lista de Disciplinas, com nome do professor, que extrapolam 40 vagas [X]
 */
 
+// FAZER UMA FUNÇÃO QUE PRINTE OS FORMATOS ACEITOS POR CADA ENTRADA
 // gcc main.c alunos.c auxiliares.c disciplinas.c gerais.c leituras.c listar.c professores.c validacoes.c -o projetoescola
 
 #include <stdio.h>
@@ -32,7 +33,7 @@ Relatórios:
 #define vet_size 1000
 
 typedef struct{
-  char matricula[12];
+  int matricula;
   char nome[52];
   char sexo[3];
   char dataNasc[12];
@@ -75,7 +76,7 @@ int main(){
 
   //Para debug
   strcpy(alunos[0].nome, "LUAN");
-  strcpy(alunos[0].matricula, "2019116025");
+  alunos[0].matricula = 10000;
   strcpy(alunos[0].cpf, "86409822529");
   strcpy(alunos[0].dataNasc, "5/5/2001");
   strcpy(alunos[0].sexo, "M");
@@ -83,7 +84,7 @@ int main(){
   qtd_alunos++;
 
   strcpy(professores[0].nome, "RENATO");
-  strcpy(professores[0].matricula, "2019110625");
+  professores[0].matricula = 9999;
   strcpy(professores[0].cpf, "52998224725");
   strcpy(professores[0].dataNasc, "2/10/1985");
   strcpy(professores[0].sexo, "M");
@@ -102,7 +103,7 @@ int main(){
     
     switch(menu_main){
       case 0: break;
-      case 1: qtd_alunos = menu_Alunos(alunos, qtd_alunos); break;
+      case 1: qtd_alunos = menu_Alunos(alunos, disciplinas, qtd_alunos, qtd_disciplina); break;
       case 2: qtd_prof = menu_Professores(professores, qtd_prof); break;
       case 3: qtd_disciplina = menu_Disciplinas(disciplinas, alunos, professores, qtd_disciplina, qtd_alunos, qtd_prof); break;
       case 4: busca(alunos, professores, qtd_alunos, qtd_prof); break;

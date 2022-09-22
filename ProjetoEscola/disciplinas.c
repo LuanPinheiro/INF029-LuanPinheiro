@@ -5,7 +5,7 @@
 #define vet_size 1000
 
 typedef struct{
-  char matricula[12];
+  int matricula;
   char nome[52];
   char sexo[3];
   char dataNasc[12];
@@ -31,7 +31,7 @@ int menu_Disciplinas(ficha_disciplina disciplinas[], ficha_pessoa alunos[], fich
     limparTela();
     imprimir_linhas();
     printf("\nMENU DISCIPLINAS\n\n");
-    printf("1. Cadastro de Disciplinas\n2. Listar Disciplinas\n3. Inserir Aluno em Uma Disciplina\n4. Excluir Aluno em uma Disciplina\n5. Listar 1 Disciplina\n6. Disciplinas com mais de 40 matriculas \n");
+    printf("1. Cadastro de Disciplinas\n2. Listar Disciplinas\n3. Inserir Aluno em Uma Disciplina\n4. Excluir Aluno em uma Disciplina\n5. Listar uma Disciplina\n6. Disciplinas com mais de 40 matriculas \n");
     printf("(Digite 0 para retornar ao menu anterior)\n\n");
     
     scanf("%d", &menu_disciplina);
@@ -39,21 +39,42 @@ int menu_Disciplinas(ficha_disciplina disciplinas[], ficha_pessoa alunos[], fich
 
     switch(menu_disciplina){
       case 0: break;
+      
       case 1: qtd_disciplina = cadastro_Disciplinas(disciplinas, professores, qtd_disciplina, qtd_prof); break;
+      
       case 2: if(qtd_disciplina>0)
         listar_disciplinas(disciplinas, qtd_disciplina);
         else
           printf("***NAO HA DISCIPLINAS CADASTRADAS***\n\n"); break;
-      case 3: if(qtd_alunos>0)
+      
+      case 3: if(qtd_alunos>0 && qtd_disciplina>0)
         insert_AlunoDisc(disciplinas, alunos, qtd_disciplina, qtd_alunos);
-        else
-          printf("***NAO HA ALUNOS CADASTRADOS***\n\n"); break;
-      case 4: break;
+        else{
+          if(qtd_alunos==0)
+            printf("***NAO HA ALUNOS CADASTRADOS***\n\n");
+          if(qtd_disciplina==0)
+            printf("***NAO HA DISCIPLINAS CADASTRADAS***\n\n");
+        } break;
+      
+      case 4: if(qtd_alunos>0 && qtd_disciplina>0)
+        exclude_AlunoDisc(disciplinas, alunos, qtd_disciplina, qtd_alunos);
+        else{
+          if(qtd_alunos==0)
+            printf("***NAO HA ALUNOS CADASTRADOS***\n\n");
+          if(qtd_disciplina==0)
+            printf("***NAO HA DISCIPLINAS CADASTRADAS***\n\n");
+        } break;
+      
       case 5: if(qtd_disciplina>0)
         listar1disc(disciplinas, alunos, qtd_disciplina, qtd_alunos);
         else
           printf("***NAO HA DISCIPLINAS CADASTRADAS***\n\n"); break;
-      case 6: break;
+      
+      case 6: if(qtd_disciplina>0)
+        listarDisc40(disciplinas, qtd_disciplina);
+        else
+          printf("***NAO HA DISCIPLINAS CADASTRADAS***\n\n"); break;
+      
       default: printf("***ENTRADA INVALIDA***\n\n"); break;
     }
   }while(menu_disciplina!=0);
@@ -141,10 +162,11 @@ void ProfessorDisc(ficha_disciplina disciplinas[], ficha_pessoa professores[], i
   strcpy(disciplinas[index].nome_p, professores[i].nome);
 }
 
-//****************** Função que faz exclusão lógica de uma pessoa, através da modificação de uma variavel que funciona como uma flag se a pessoa está cadastrado ou não. E diminui o contador de pessoas cadastradas
+//****************** Função que faz exclusão lógica de uma disciplina, através da modificação de uma variavel que funciona como uma flag se a disciplina está cadastrada ou não. E diminui o contador de disciplinas cadastradas
 int exclude_Disciplina(ficha_disciplina disciplinas[], int qtd){
   int op, i;
 
+  // Escolhendo uma disciplina válida
   do{
     limparTela();
     listar_disciplinas(disciplinas, qtd);
@@ -157,10 +179,12 @@ int exclude_Disciplina(ficha_disciplina disciplinas[], int qtd){
       printf("\n***ENTRADA INVALIDA***\n");
   }while(op<0 || op>qtd);
 
+  // Retornando em caso de digitar 0
   if(op==0){
     printf("\n***VOLTANDO***\n");
   }
   else{
+    // Encontrando o índice no vetor de struct de disciplinas, tendo como referência o que o usuário digitou no menu, e mudando a flag da disciplina para não cadastrada
     i = trueIndexDisciplina(op, disciplinas);
     disciplinas[i].cadastrado=false;
     qtd--;
@@ -175,6 +199,7 @@ int exclude_Disciplina(ficha_disciplina disciplinas[], int qtd){
 void update_Disciplina(ficha_disciplina disciplinas[], ficha_pessoa professores[], int qtd_disciplina, int qtd_prof){
   int op, op2, i, count;
 
+  // Escolhendo uma disciplina cadastrada
   do{
     limparTela();
     listar_disciplinas(disciplinas, qtd_disciplina);
@@ -187,7 +212,9 @@ void update_Disciplina(ficha_disciplina disciplinas[], ficha_pessoa professores[
       printf("\n***ENTRADA INVALIDA***\n");
   }while(op<0 || op>qtd_disciplina);
 
+  // Continua o código caso escolha uma disciplina que tenha aparecido no menu
   if(op!=0){
+    // Escolhe um dos dados da disciplina, para então alterar
     do{
       limparTela();
       imprimir_linhas();
@@ -221,6 +248,7 @@ void insert_AlunoDisc(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int
   int index_disc, index_aluno, op, op2, i, count;
   int maxop2=0;// Valor máximo que o op2 pode ter, será calculado diferente por não printar todos os alunos cadastrados no sistema na tela, vai printar apenas os que ainda não foram cadastrados na matricula escolhida
 
+  // Escolhe uma disciplina cadastrada
   do{
     limparTela();
     listar_disciplinas(disciplinas, qtd_disciplina);
@@ -233,6 +261,7 @@ void insert_AlunoDisc(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int
       printf("\n***ENTRADA INVALIDA***\n");
   }while(op<0 || op>qtd_disciplina);
 
+  // Continua o código caso escolha uma disciplina que tenha aparecido no menu
   if(op==0)
     printf("\n***VOLTANDO***\n");
   else{
@@ -247,7 +276,7 @@ void insert_AlunoDisc(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int
             printf("******#%d\n", maxop2+1);
             printf("\nNome: %s\n", alunos[i].nome);
             printf("\nCPF: %s\n", alunos[i].cpf);
-            printf("\nMatricula: %s\n", alunos[i].matricula);
+            printf("\nMatricula: %d\n", alunos[i].matricula);
             printf("\nData de Nascimento: %s\n", alunos[i].dataNasc);
             printf("\nSexo: %c\n\n", alunos[i].sexo[0]);
             maxop2++;
@@ -256,14 +285,16 @@ void insert_AlunoDisc(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int
         }
       
       if(maxop2==0){
-        printf("***NAO HA ALUNOS DISPONIVEIS PARA INSERIR NESTA DISCIPLINA***");
+        printf("***NAO HA ALUNOS DISPONIVEIS PARA INSERIR NESTA DISCIPLINA***\n");
         op2=0;
       }
       else{
+        // Escolhendo o aluno que será inserido na disciplina
         printf("\nEscolha o aluno a ser inserido na disciplina\n");
         printf("(Digite 0 para retornar ao menu de disciplinas)\n");
         scanf("%d", &op2);
         getchar();
+        
         if(op2<0 || op2>maxop2)
         printf("\n***ENTRADA INVALIDA***\n");
       }
@@ -284,7 +315,14 @@ void insert_AlunoDisc(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int
       i--;
       index_aluno = i;
       // Inserindo o indice do aluno escolhido no vetor de alunos matriculados na disciplina escolhida
-      disciplinas[index_disc].alunosMatriculados[disciplinas[index_disc].qtdMat] = index_aluno;
+      for(i=0;count<disciplinas[index_disc].qtdMat;i++){
+        if(disciplinas[index_disc].alunosMatriculados[i]==-1)
+          break;
+        else if(disciplinas[index_disc].alunosMatriculados[i]!=-1)
+          count++;
+      }
+        
+      disciplinas[index_disc].alunosMatriculados[i] = index_aluno;
       disciplinas[index_disc].qtdMat++;
 
       printf("\nALUNO INSERIDO NA DISCIPLINA\n");
@@ -293,8 +331,8 @@ void insert_AlunoDisc(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int
 }
 
 //****************** Função que exclui um aluno de uma disciplina
-/*void exclude_AlunoDisc(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int qtd_disciplina, int qtd_alunos){
-  int index_disc, index_aluno, op, op2;
+void exclude_AlunoDisc(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int qtd_disciplina, int qtd_alunos){
+  int index_disc, index_aluno, op, op2, i, count;
 
   do{
     limparTela();
@@ -311,34 +349,53 @@ void insert_AlunoDisc(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int
   if(op==0)
     printf("\n***VOLTANDO***\n");
   else{
+    // Encontrando o índice correto de disciplina para alterar os dados
+    index_disc = trueIndexDisciplina(op, disciplinas);
     do{
       limparTela();
-      for(int i=0;)
-      printf("\nEscolha o aluno a ser excluido da disciplina\n");
-      printf("(Digite 0 para retornar ao menu de disciplinas)\n");
-      scanf("%d", &op2);
-      getchar();
-
-      if(op2<0 || op2>qtd_alunos)
-        printf("\n***ENTRADA INVALIDA***\n");
+      for(i=0, count=0;count<disciplinas[index_disc].qtdMat;i++){
+        if(disciplinas[index_disc].alunosMatriculados[i]!=-1){
+          printf("******#%d\n", count+1);
+          printf("\nNome: %s\n", alunos[i].nome);
+          printf("\nCPF: %s\n", alunos[i].cpf);
+          printf("\nMatricula: %d\n", alunos[i].matricula);
+          printf("\nData de Nascimento: %s\n", alunos[i].dataNasc);
+          printf("\nSexo: %c\n\n", alunos[i].sexo[0]);
+          count++;
+        }
+      }
+      if(count==0){
+        printf("***NAO HA ALUNOS NESSA DISCIPLINA***\n");
+        break;
+      }
+      else{
+        printf("\nEscolha o aluno a ser excluido da disciplina\n");
+        printf("(Digite 0 para retornar ao menu de disciplinas)\n");
+        scanf("%d", &op2);
+        getchar();
+  
+        if(op2<0 || op2>qtd_alunos)
+          printf("\n***ENTRADA INVALIDA***\n");
+      }
     }while(op2<0 || op2>qtd_alunos);
 
     
     if(op2==0)
       printf("\n***VOLTANDO***\n");
     else{
-      // Encontrando o índice correto de disciplina para alterar os dados
-      index_disc = trueIndexDisciplina(op, disciplinas);
       // Encontrando o índice correto de aluno para alterar os dados
       index_aluno = trueIndexPessoa(op2, alunos);
 
-      
-      disciplinas[index_disc].qtdMat++;
+      for(i=0, count=0;count<disciplinas[index_disc].qtdMat;i++)
+        if(disciplinas[index_disc].alunosMatriculados[i]==index_aluno)
+          break;
+      disciplinas[index_disc].alunosMatriculados[i]=-1;
+      disciplinas[index_disc].qtdMat--;
 
-      printf("ALUNO INSERIDO NA DISCIPLINA");
+      printf("\n***ALUNO INSERIDO NA DISCIPLINA***\n");
     }
   }
-}*/
+}
 //****************** SE DER TEMPO IMPLEMENTAR ESSA FUNÇÃO CORRIGIDA - Checa se há algum código de disciplina repetido em outra disciplina já cadastrada, retorna 2 caso encontre alguma igual
 /*int codigoRepetido(ficha_disciplina disciplina[], int index){
   int repetido = false;

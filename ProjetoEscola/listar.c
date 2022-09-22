@@ -4,7 +4,7 @@
 #define vet_size 1000
 
 typedef struct{
-  char matricula[12];
+  int matricula;;
   char nome[52];
   char sexo[3];
   char dataNasc[12];
@@ -29,7 +29,7 @@ void listar_pessoas(ficha_pessoa pessoas[], int qtd){
       printf("******#%d\n", count+1);
       printf("\nNome: %s\n", pessoas[i].nome);
       printf("\nCPF: %s\n", pessoas[i].cpf);
-      printf("\nMatricula: %s\n", pessoas[i].matricula);
+      printf("\nMatricula: %d\n", pessoas[i].matricula);
       printf("\nData de Nascimento: %s\n", pessoas[i].dataNasc);
       printf("\nSexo: %c\n\n", pessoas[i].sexo[0]);
   
@@ -37,9 +37,8 @@ void listar_pessoas(ficha_pessoa pessoas[], int qtd){
     }
 }
 
-//****************** Lista as disciplinas na ordem q foram cadastradas
+//****************** Lista as disciplinas na ordem que foram cadastradas
 void listar_disciplinas(ficha_disciplina disciplinas[], int qtd){
-  int count;
   for(int i=0, count=0;count<qtd;i++)
     if(disciplinas[i].cadastrado==true){
       printf("\n\n******#%d\n", count+1);
@@ -68,7 +67,7 @@ void listar_pessoas_sexo(ficha_pessoa pessoas[], int qtd){
         printf("******#%d\n", count2+1);
         printf("\nNome: %s\n", pessoas[i].nome);
         printf("\nCPF: %s\n", pessoas[i].cpf);
-        printf("\nMatricula: %s\n", pessoas[i].matricula);
+        printf("\nMatricula: %d\n", pessoas[i].matricula);
         printf("\nData de Nascimento: %s\n", pessoas[i].dataNasc);
         printf("\nSexo: %c\n\n", pessoas[i].sexo[0]);
         count2++;
@@ -77,6 +76,7 @@ void listar_pessoas_sexo(ficha_pessoa pessoas[], int qtd){
     }
 }
 
+//****************** Lista uma disciplina com todos os seus dados, e seus alunos cadastrados
 void listar1disc(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int qtd_disciplina, int qtd_alunos){
   ficha_disciplina entrada[2];
 
@@ -96,7 +96,7 @@ void listar1disc(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int qtd_
           printf("******#%d\n", count+1);
           printf("\nNome: %s\n", alunos[disciplinas[i].alunosMatriculados[j]].nome);
           printf("\nCPF: %s\n", alunos[disciplinas[i].alunosMatriculados[j]].cpf);
-          printf("\nMatricula: %s\n", alunos[disciplinas[i].alunosMatriculados[j]].matricula);
+          printf("\nMatricula: %d\n", alunos[disciplinas[i].alunosMatriculados[j]].matricula);
           printf("\nData de Nascimento: %s\n", alunos[disciplinas[i].alunosMatriculados[j]].dataNasc);
           printf("\nSexo: %c\n\n", alunos[disciplinas[i].alunosMatriculados[j]].sexo[0]);
         }
@@ -105,9 +105,69 @@ void listar1disc(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int qtd_
       break;
     }
   }
-  
 }
 
+//****************** Lista alunos que estão matriculados em menos de 3 disciplinas
+void listarcad3(ficha_pessoa alunos[], ficha_disciplina disciplinas[], int qtd_alunos, int qtd_disciplina){
+  int count=0, count4=0, qtd;
+  limparTela();
+  
+  for(int i=0;count<qtd_alunos;i++){
+    if(alunos[i].cadastrado==true){
+      qtd=0;
+      for(int j=0, count2=0;count2<qtd_disciplina;j++){
+        if(disciplinas[j].cadastrado==true){
+          for(int k=0, count3=0;count3<disciplinas[j].qtdMat;k++){
+            if(disciplinas[j].alunosMatriculados[k]!=-1){
+              if(disciplinas[j].alunosMatriculados[k]==i){
+                qtd++;
+                break;
+              }
+              count3++;
+            }
+          }
+          count2++;
+        }
+      }
+      if(qtd<3){
+        printf("******#%d\n", count4+1);
+        printf("\nCadastrado em %d disciplinas\n", qtd);
+        printf("\nNome: %s\n", alunos[i].nome);
+        printf("\nCPF: %s\n", alunos[i].cpf);
+        printf("\nMatricula: %d\n", alunos[i].matricula);
+        printf("\nData de Nascimento: %s\n", alunos[i].dataNasc);
+        printf("\nSexo: %c\n\n", alunos[i].sexo[0]);
+        count4++;
+      }
+      count++;
+    }
+  }
+  if(count4==0)
+    printf("***NAO FORAM ENCONTRADOS ALUNOS MATRICULADOS EM MENOS DE 3 DISCIPLINAS***\n");
+}
+
+//****************** Lista as disciplinas na ordem que foram cadastradas
+void listarDisc40(ficha_disciplina disciplinas[], int qtd){
+  int count2;
+
+  limparTela();
+  for(int i=0, count=0, count2=0;count<qtd;i++)
+    if(disciplinas[i].cadastrado==true){
+      if(disciplinas[i].qtdMat>40){
+        printf("\n\n******#%d\n", count2+1);
+        printf("\nNome da disciplina: %s\n", disciplinas[i].nome);
+        printf("\nCodigo da disciplina: %s\n", disciplinas[i].codigo);
+        printf("\nSemestre: %s\n", disciplinas[i].semestre);
+        printf("\nNome do Professor: %s\n\n", disciplinas[i].nome_p);
+        count2++;
+      }
+      count++;
+    }
+  if(count2==0)
+    printf("***NAO FORAM ENCONTRADAS DISCIPLINAS COM MAIS DE 40 ALUNOS***\n");
+}
+
+//****************** Recebe uma string de no mínimo 3 caracteres, e printa todas as pessoas que tenham essas letras em seu nome
 void busca(ficha_pessoa alunos[], ficha_pessoa professores[], int qtd_alunos, int qtd_prof){
   ficha_pessoa entrada[2];
   int i, j, k, count, count2, countPrint;
@@ -135,7 +195,7 @@ void busca(ficha_pessoa alunos[], ficha_pessoa professores[], int qtd_alunos, in
         printf("******#%d\n", count2+1);
         printf("\nNome: %s\n", alunos[i].nome);
         printf("\nCPF: %s\n", alunos[i].cpf);
-        printf("\nMatricula: %s\n", alunos[i].matricula);
+        printf("\nMatricula: %d\n", alunos[i].matricula);
         printf("\nData de Nascimento: %s\n", alunos[i].dataNasc);
         printf("\nSexo: %c\n\n", alunos[i].sexo[0]);
         count2++;
@@ -165,7 +225,7 @@ void busca(ficha_pessoa alunos[], ficha_pessoa professores[], int qtd_alunos, in
         printf("******#%d\n", count2+1);
         printf("\nNome: %s\n", professores[i].nome);
         printf("\nCPF: %s\n", professores[i].cpf);
-        printf("\nMatricula: %s\n", professores[i].matricula);
+        printf("\nMatricula: %d\n", professores[i].matricula);
         printf("\nData de Nascimento: %s\n", professores[i].dataNasc);
         printf("\nSexo: %c\n\n", professores[i].sexo[0]);
         count2++;

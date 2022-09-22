@@ -5,7 +5,7 @@
 #define vet_size 1000
 
 typedef struct{
-  char matricula[12];
+  int matricula;
   char nome[52];
   char sexo[3];
   char dataNasc[12];
@@ -31,7 +31,7 @@ int insert_Pessoa(ficha_pessoa pessoa[], int qtd){
   //Todas as entradas são validadas em suas respectivas funções
   lerNome(pessoa, qtd);
   lerCPF(pessoa, qtd);
-  lerMatricula(pessoa, qtd);
+  pessoa[qtd].matricula = AddMatricula();
   lerDataNasc(pessoa, qtd);
   lerSexo(pessoa, qtd);
 
@@ -45,6 +45,7 @@ int insert_Pessoa(ficha_pessoa pessoa[], int qtd){
 
 //****************** Função que faz exclusão lógica de uma pessoa, através da modificação de uma variavel que funciona como uma flag se a pessoa está cadastrado ou não. E diminui o contador de pessoas cadastradas
 int exclude_Pessoa(ficha_pessoa pessoa[], int qtd){
+  //******************************************************************************************************************************************************************************************SERÁ NECESSÁRIO DIVIDIR ESSA FUNÇÃO ENTRE DUAS DIFERENTES:PROFESSORES E ALUNOS, POIS NA EXCLUSÃO HÁ DETALHES DISTINTOS, PRINCIPALMENTE NA RELAÇÃO ENTRE OS DADOS E AS DISCIPLINAS //******************************************************************************************************************************************************************************************AO EXCLUIR UM ALUNO, TERÁ QUE SAIR TAMBÉM OS DADOS DELE DAS DISCIPLINAS: SEU INDICE NOS MATRICULADOS. E NOS PROFESSORES: SAIR SEU NOME DAS DISCIPLINAS EM QUE ESTÁ MATRICULADO
   int op, i;
 
   do{
@@ -77,6 +78,7 @@ int exclude_Pessoa(ficha_pessoa pessoa[], int qtd){
 void update_Pessoa(ficha_pessoa pessoa[], int qtd){
   int op, op2, i;
 
+  // Escolhendo uma pessoa cadastrada
   do{
     limparTela();
     listar_pessoas(pessoa, qtd);
@@ -89,6 +91,7 @@ void update_Pessoa(ficha_pessoa pessoa[], int qtd){
       printf("\n***ENTRADA INVALIDA***\n");
   }while(op<0 || op>qtd);
 
+  // Continua o código caso escolha uma pessoa que tenha aparecido no menu
   if(op!=0){
     do{
       limparTela();
@@ -107,7 +110,7 @@ void update_Pessoa(ficha_pessoa pessoa[], int qtd){
         switch(op2){
           case 1: lerNome(pessoa, i); break;
           case 2: lerCPF(pessoa, i); break;
-          case 3: lerMatricula(pessoa, i); break;
+          case 3: pessoa[i].matricula = AddMatricula(); break;
           case 4: lerDataNasc(pessoa, i); break;
           case 5: lerSexo(pessoa, i); break;
           default: printf("***ENTRADA INVALIDA***\n\n");
@@ -119,11 +122,13 @@ void update_Pessoa(ficha_pessoa pessoa[], int qtd){
   }
 }
 
+//****************** Função que printa os aniversariantes do mês, tendo como referencia uma entrada do usuário que indicará o mês a ser buscado
 void aniversariantes (ficha_pessoa alunos[], ficha_pessoa professores[], int qtd_alunos, int qtd_prof){
   int i, count, count2, mes, mesPessoa;
   
   limparTela();
 
+  // Escolhendo o mês a ser comparado com os outros
   do{
     printf("Digite o mês atual: ");
     scanf("%d",&mes);
@@ -132,6 +137,8 @@ void aniversariantes (ficha_pessoa alunos[], ficha_pessoa professores[], int qtd
       printf("\n***ENTRADA INVALIDA***\n");
   }while(mes<1 || mes>12);
 
+  // O programa printa todas as pessoas que tenham data de nascimento no mesmo mês da entrada anterior
+  // Printando os alunos
   printf("\n***ALUNOS***\n\n");
   for(i=0, count=0, count2=0;count<qtd_alunos;i++){
     if(alunos[i].cadastrado==true){
@@ -140,7 +147,7 @@ void aniversariantes (ficha_pessoa alunos[], ficha_pessoa professores[], int qtd
         printf("******#%d\n", count2+1);
         printf("\nNome: %s\n", alunos[i].nome);
         printf("\nCPF: %s\n", alunos[i].cpf);
-        printf("\nMatricula: %s\n", alunos[i].matricula);
+        printf("\nMatricula: %d\n", alunos[i].matricula);
         printf("\nData de Nascimento: %s\n", alunos[i].dataNasc);
         printf("\nSexo: %c\n\n", alunos[i].sexo[0]);
         count2++;
@@ -151,6 +158,7 @@ void aniversariantes (ficha_pessoa alunos[], ficha_pessoa professores[], int qtd
   if(count2==0)
     printf("\n***NAO HA ALUNOS QUE FAZEM ANIVERSARIO ESTE MES***\n");
 
+  // Printando os professores
   printf("\n***PROFESSORES***\n\n");
   for(i=0, count=0, count2=0;count<qtd_prof;i++){
     if(professores[i].cadastrado==true){
@@ -159,7 +167,7 @@ void aniversariantes (ficha_pessoa alunos[], ficha_pessoa professores[], int qtd
         printf("******#%d\n", count2+1);
         printf("\nNome: %s\n", professores[i].nome);
         printf("\nCPF: %s\n", professores[i].cpf);
-        printf("\nMatricula: %s\n", professores[i].matricula);
+        printf("\nMatricula: %d\n", professores[i].matricula);
         printf("\nData de Nascimento: %s\n", professores[i].dataNasc);
         printf("\nSexo: %c\n\n", professores[i].sexo[0]);
         count2++;

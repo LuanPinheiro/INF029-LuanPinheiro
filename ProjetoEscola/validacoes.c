@@ -15,14 +15,6 @@ int validarNome(char validNome[]){
   return false;
 }
 
-//****************** Checa se há caracteres além de numeros na matricula
-int validarMatricula(char validMat[]){
-  for(int i=0;validMat[i]!='\0';i++)
-    if(validMat[i]>57 || validMat[i]<48)
-      return true;
-
-  return false;
-}
 //****************** Valida se o código está na estrutura correta de Letras e Numeros
 int validarCodigo(char validCod[]){
   int i;

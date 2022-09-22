@@ -4,7 +4,7 @@
 #define vet_size 1000
 
 typedef struct{
-  char matricula[12];
+  int matricula;
   char nome[52];
   char sexo[3];
   char dataNasc[12];
@@ -23,7 +23,7 @@ typedef struct{
 }ficha_disciplina;
 
 //****************** Menu dos alunos, redireciona para todas as funções de cadastro e relatório de alunos
-int menu_Alunos(ficha_pessoa alunos[], int qtd_alunos){
+int menu_Alunos(ficha_pessoa alunos[], ficha_disciplina disciplinas[], int qtd_alunos, int qtd_disciplina){
   int menu_alunos;
 
   do{
@@ -49,7 +49,14 @@ int menu_Alunos(ficha_pessoa alunos[], int qtd_alunos){
           printf("***NAO HA ALUNOS CADASTRADOS***\n\n"); break;
       case 4: break;
       case 5: break;
-      case 6: break;
+      case 6: if(qtd_alunos>0 && qtd_disciplina>0)
+        listarcad3(alunos, disciplinas, qtd_alunos, qtd_disciplina);
+        else{
+          if(qtd_disciplina==0)
+            printf("***NAO HA DISCIPLINAS CADASTRADAS***\n\n");
+          if(qtd_alunos==0)
+            printf("***NAO HA ALUNOS CADASTRADOS***\n\n");
+        } break;
       default: printf("***ENTRADA INVALIDA***\n\n");
     }
   }while(menu_alunos!=0);

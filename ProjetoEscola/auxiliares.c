@@ -4,7 +4,7 @@
 #define vet_size 1000
 
 typedef struct{
-  char matricula[12];
+  int matricula;
   char nome[52];
   char sexo[3];
   char dataNasc[12];
@@ -95,11 +95,10 @@ int trueIndexDisciplina(int input, ficha_disciplina disciplinas[]){
 
 //****************** Busca se o aluno está matriculado na disciplina, retorna true se achar o aluno na matricula
 int checkMatriculado(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int index_disc, int index_alunos){
-  int retorno = false;
   for(int i=0, count=0;count<disciplinas[index_disc].qtdMat;i++){
     if(disciplinas[index_disc].alunosMatriculados[i]!=-1){
       if(disciplinas[index_disc].alunosMatriculados[i]==index_alunos){
-        retorno = true;
+        return true;
         break;
       }
       count++;
@@ -107,10 +106,10 @@ int checkMatriculado(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int 
   }
 
 
-  return retorno;
+  return false;
 }
 
-// Função que retorna o mês em inteiro dada a string de data
+//****************** Função que retorna o mês em inteiro dada a string de data
 int mesInt (char validNasc[]){
   int identificador=0;
   int mes, str_count=0;
@@ -140,4 +139,10 @@ int mesInt (char validNasc[]){
   }
 
   return false;
+}
+
+int AddMatricula(){
+  static int matriculaAtual = 10000;
+  matriculaAtual++;
+  return matriculaAtual;
 }

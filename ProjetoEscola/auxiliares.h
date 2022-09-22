@@ -8,3 +8,4 @@ int trueIndexPessoa(int input, ficha_pessoa pessoa[]);
 int trueIndexDisciplina(int input, ficha_disciplina disciplinas[]);
 int checkMatriculado(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int index_disc, int index_alunos);
 int mesInt (char validNasc[]);
+int AddMatricula();
