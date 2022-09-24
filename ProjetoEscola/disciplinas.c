@@ -98,18 +98,22 @@ int cadastro_Disciplinas(ficha_disciplina disciplinas[], ficha_pessoa professore
 
     switch(menu_cadDisciplina){
       case 0: break;
+      
       case 1: if(qtd_prof>0)
         qtd_disciplina = insert_Disciplina(disciplinas, professores, qtd_disciplina, qtd_prof);
         else
           printf("***NAO HA PROFESSORES CADASTRADOS***\n\n"); break;
+      
       case 2: if(qtd_disciplina>0)
         qtd_disciplina = exclude_Disciplina(disciplinas, qtd_disciplina);
         else
           printf("***NAO HA DISCIPLINAS CADASTRADAS***\n\n"); break;
+      
       case 3: if(qtd_disciplina>0)
         update_Disciplina(disciplinas, professores, qtd_disciplina, qtd_prof);
         else
           printf("***NAO HA DISCIPLINAS CADASTRADAS***\n\n"); break;
+      
       default:  printf("***ENTRADA INVALIDA***\n\n");
       }
   }while(menu_cadDisciplina!=0);

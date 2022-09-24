@@ -110,55 +110,13 @@ int validarSexo(char validSexo) {
 
 //****************** Checa se é uma data válida, inclui validação de ano bissexto
 int validarNascimento(char validNasc[]) {
-  int dia, mes, ano, i;
-  int identificador = 0;
+  int dia, mes, ano;
   int aux, ano_atual = 2022, ano_min = 1900;
-  int str_count = 0;
   
-  // Conversão de Dias e Mêses em inteiros
-  for(i=0;validNasc[i]!='\0';i++){ 
-    if(validNasc[i] == '/'){
-      if(identificador == 2)
-        return true;
-      else if(str_count == 0 || str_count > 2)
-        return true;
-      else 
-        if(str_count == 2){
-          if(identificador == 0) {
-            dia = ((validNasc[i-2] - 48) * 10) + (validNasc[i-1] - 48);
-            identificador++;
-          }
-          else 
-            if(identificador == 1){
-              mes = ((validNasc[i-2] - 48) * 10) + (validNasc[i-1] - 48);
-              identificador++;
-            }
-        }
-        else
-          if (identificador == 0){
-            dia = validNasc[i-1] - 48;
-            identificador++;
-          }
-          else 
-            if (identificador == 1){
-              mes = validNasc[i-1] - 48;
-              identificador++;
-            }
-      str_count = 0;
-    }
-    else
-      str_count++;
-  }
-  
-  //Conversão de Ano em Int
-  for (ano = 0; str_count > 0; str_count--){
-    aux = validNasc[i - str_count] - 48;
-
-    for (int x=0; x<str_count-1; x++)
-      aux *= 10;
-
-    ano += aux;
-  }
+  // Conversão de Dias, Mêses em inteiros
+  dia = diaInt(validNasc);
+  mes = mesInt(validNasc);
+  ano = anoInt(validNasc);
 
   //Validação de Ano
   if(ano <= 0 || ano >= ano_atual || ano < ano_min)

@@ -141,6 +141,61 @@ int mesInt (char validNasc[]){
   return false;
 }
 
+//****************** Função que retorna o dia em inteiro dada a string de data
+int diaInt(char validNasc[]){
+  int dia, str_count=0;
+  
+  for(int i=0;validNasc[i]!='\0';i++){ 
+    if(validNasc[i] == '/')
+      if(str_count == 2){
+        dia = ((validNasc[i-2] - 48) * 10) + (validNasc[i-1] - 48);
+        break;
+      }
+      else{
+        dia = validNasc[i-1] - 48;
+        break;
+      }
+    else
+      str_count++;
+  }
+
+  return dia;
+}
+
+//****************** Função que retorna o ano em inteiro dada a string de data
+int anoInt(char validNasc[]){
+  int ano, tam;
+  
+  tam = strlen(validNasc);
+  tam--;
+  ano = ((validNasc[tam-3]-48)*1000) + ((validNasc[tam-2]-48)*100) + ((validNasc[tam-1]-48)*10) + (validNasc[tam]-48);
+
+  return ano;
+}
+
+void instrucoes(){
+  limparTela();
+  printf("ENTRADAS E EXEMPLOS:\n\n");
+  
+  printf("Nome:\n");
+  printf("-> De ate 50 caracteres\n-> Apenas letras e espacos(nao pode haver espaco na primeira posicao)\n-> Todas as letras se tornarao maiusculas apos a entrada\n-> EXEMPLO: Luan Pinheiro\n\n");
+
+  printf("Data de Nascimento:\n");
+  printf("-> De ate 10 caracteres\n-> Apenas numeros e barra('/')\n-> Formatos aceitos: d/m/aaaa; dd/m/aaaa; d/mm/aaaa; dd/mm/aaaa; com ano maior que 1900 e menor que 2022\n-> EXEMPLO: 05/05/2001\n\n");
+
+  printf("Sexo:\n");
+  printf("-> De apenas 1 caractere\n-> Apenas f/m/o\n-> Apos a entrada o caracter se tornara maiusculo\n-> EXEMPLO: M\n\n");
+
+  printf("CPF:\n");
+  printf("-> De ate 11 caracteres\n-> Apenas numeros\n-> Deve seguir as regras reais de validacao de um CPF, portanto indique um CPF valido\n-> EXEMPLO: 86409822529\n\n");
+
+  printf("Codigo:\n");
+  printf("-> De ate 6 caracteres\n-> Apenas letras nos 3 primeiros caracteres e apenas numeros nos 3 ultimos caracteres\n-> Todas as letras se tornarao maiusculas apos a entrada\n-> EXEMPLO: INF029\n\n");
+
+  printf("Semestre:\n");
+  printf("-> De ate 6 caracteres\n-> Apenas numeros e ponto('.')\n-> 4 numeros, 1 ponto e 1 ultimo numero\n-> EXEMPLO: 2022.2\n\n");
+}
+
 int AddMatricula(){
   static int matriculaAtual = 10000;
   matriculaAtual++;

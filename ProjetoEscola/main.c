@@ -12,18 +12,17 @@ Relatórios:
   Listar Disciplinas(sem informações de alunos) [X]
   Listar UMA disciplina(dados da disciplina e alunos matriculados) [X]
   Listar Alunos por Sexo [X]
-  Listar Alunos por Nome []
-  Listar Alunos por data de nascimento []
+  Listar Alunos por Nome [X]
+  Listar Alunos por data de nascimento [X]
   Listar Professores por Sexo [X]
-  Listar Professores por Nome []
-  Listar Professores por data de nascimento []
+  Listar Professores por Nome [X]
+  Listar Professores por data de nascimento [X]
   Aniversariantes do mês [X]
   Lista de pessoas(Professores e Alunos) a partir de uma string de busca de no minimo 3 caracteres [X]
   Lista de Alunos matriculados em menos de 3 disciplinas [X]
   Lista de Disciplinas, com nome do professor, que extrapolam 40 vagas [X]
 */
 
-// FAZER UMA FUNÇÃO QUE PRINTE OS FORMATOS ACEITOS POR CADA ENTRADA
 // gcc main.c alunos.c auxiliares.c disciplinas.c gerais.c leituras.c listar.c professores.c validacoes.c -o projetoescola
 
 #include <stdio.h>
@@ -95,7 +94,7 @@ int main(){
     limparTela();
     imprimir_linhas();
     printf("\nMENU PRINCIPAL\n\n");
-    printf("1. Alunos\n2. Professores\n3. Disciplinas\n4. Buscar Pessoas\n5. Aniversariantes do Mês\n");
+    printf("1. Alunos\n2. Professores\n3. Disciplinas\n4. Buscar Pessoas\n5. Aniversariantes do Mês\n6. Instrucoes\n");
     printf("(Digite 0 para fechar o programa)\n\n");
     
     scanf("%d", &menu_main);
@@ -103,11 +102,19 @@ int main(){
     
     switch(menu_main){
       case 0: break;
+      
       case 1: qtd_alunos = menu_Alunos(alunos, disciplinas, qtd_alunos, qtd_disciplina); break;
+      
       case 2: qtd_prof = menu_Professores(professores, qtd_prof); break;
+      
       case 3: qtd_disciplina = menu_Disciplinas(disciplinas, alunos, professores, qtd_disciplina, qtd_alunos, qtd_prof); break;
+      
       case 4: busca(alunos, professores, qtd_alunos, qtd_prof); break;
+      
       case 5: aniversariantes(alunos, professores, qtd_alunos, qtd_prof); break;
+      
+      case 6: instrucoes(); break;
+      
       default: printf("***ENTRADA INVALIDA***\n\n");
     }
   }while(menu_main!=0);

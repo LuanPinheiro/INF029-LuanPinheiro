@@ -167,6 +167,122 @@ void listarDisc40(ficha_disciplina disciplinas[], int qtd){
     printf("***NAO FORAM ENCONTRADAS DISCIPLINAS COM MAIS DE 40 ALUNOS***\n");
 }
 
+//****************** Lista as pessoas(aluno ou professor), em ordem alfabética
+void listarNome(ficha_pessoa pessoas[], int qtd){
+  int i, j, menor, aux;
+  int ordenado[qtd];
+  char str_aux[52];
+  ficha_pessoa nomes[qtd];
+
+  limparTela();
+  for(i=0, aux=0;aux<qtd;i++)
+    if(pessoas[i].cadastrado==true){
+      ordenado[aux]=i;
+      strcpy(nomes[aux].nome, pessoas[i].nome);
+      aux++;
+    }
+
+  // Ordenando os nomes por selection sort
+  for(i=0;i<qtd-1;i++){
+    menor=i;
+    for(j=i+1;j<qtd;j++){
+      printf("ciclo %d:\n\n", i);
+      aux=0;
+      do{
+        if(nomes[j].nome[aux]!=32 && nomes[menor].nome[aux]!=32){
+          printf("***%s***%c*** ****%s***%c***\n", nomes[j].nome, nomes[j].nome[aux], nomes[menor].nome,nomes[menor].nome[aux]);
+          if(nomes[j].nome[aux]<nomes[menor].nome[aux]){
+            menor=j;
+            break;
+          }
+          else if(nomes[menor].nome[aux]<nomes[j].nome[aux]){
+            break;
+          }
+        }
+        aux++;
+      }while(nomes[j].nome[aux]!='\0');
+    }
+
+    if(menor!=i){
+      aux=ordenado[i];
+      ordenado[i] = ordenado[menor];
+      ordenado[menor] = aux;
+
+      strcpy(str_aux, nomes[i].nome);
+      strcpy(nomes[i].nome, nomes[menor].nome);
+      strcpy(nomes[menor].nome, str_aux);
+    }
+  }
+
+  // Printando o vetor ordenado
+  for(i=0;i<qtd;i++){
+    printf("******#%d\n", i+1);
+    printf("\nNome: %s\n", pessoas[ordenado[i]].nome);
+    printf("\nCPF: %s\n", pessoas[ordenado[i]].cpf);
+    printf("\nMatricula: %d\n", pessoas[ordenado[i]].matricula);
+    printf("\nData de Nascimento: %s\n", pessoas[ordenado[i]].dataNasc);
+    printf("\nSexo: %c\n\n", pessoas[ordenado[i]].sexo[0]);
+  }
+}
+
+void listarData(ficha_pessoa pessoas[], int qtd){
+  limparTela();
+  int dia[qtd], mes[qtd], ano[qtd], aux[qtd];
+  int count, menor, i, check;
+
+  // Transformando todos os dias meses e anos em inteiros para ordenar posteriormente
+  for(i=0;count<qtd;i++)
+    if(pessoas[i].cadastrado==true){
+      dia[count] = diaInt(pessoas[i].dataNasc);
+      mes[count] = mesInt(pessoas[i].dataNasc);
+      ano[count] = anoInt(pessoas[i].dataNasc);
+      aux[count] = i;
+      count++;
+    }
+
+  // Ordenando o vetor auxiliar via selection sort
+  for(i=0;i<qtd-1;i++){
+    menor = i;
+    for(int j=i+1;j<qtd;j++)
+      if(ano[j]<ano[menor])
+        menor=j;
+      else if(ano[j]==ano[menor])
+        if(mes[j]<mes[menor])
+          menor=j;
+        else if(mes[j]==mes[menor])
+          if(dia[j]<dia[menor])
+            menor=j;
+    
+    if(menor!=i){
+      count = aux[i]; //count funcionando como variável auxiliar
+      aux[i] = aux[menor];
+      aux[menor] = count;
+      
+      count = ano[i];
+      ano[i] = ano[menor];
+      ano[menor] = count;
+      
+      count = mes[i];
+      mes[i] = mes[menor];
+      mes[menor] = count;
+      
+      count = dia[i];
+      dia[i] = dia[menor];
+      dia[menor] = count;
+    }
+  }
+
+  // Printando o vetor ordenado
+  for(i=0;i<qtd;i++){
+    printf("******#%d\n", i+1);
+    printf("\nNome: %s\n", pessoas[aux[i]].nome);
+    printf("\nCPF: %s\n", pessoas[aux[i]].cpf);
+    printf("\nMatricula: %d\n", pessoas[aux[i]].matricula);
+    printf("\nData de Nascimento: %s\n", pessoas[aux[i]].dataNasc);
+    printf("\nSexo: %c\n\n", pessoas[aux[i]].sexo[0]);
+  }
+}
+
 //****************** Recebe uma string de no mínimo 3 caracteres, e printa todas as pessoas que tenham essas letras em seu nome
 void busca(ficha_pessoa alunos[], ficha_pessoa professores[], int qtd_alunos, int qtd_prof){
   ficha_pessoa entrada[2];

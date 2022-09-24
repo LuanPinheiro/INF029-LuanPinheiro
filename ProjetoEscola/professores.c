@@ -38,17 +38,29 @@ int menu_Professores(ficha_pessoa professores[], int qtd_prof){
 
     switch(menu_prof){
       case 0: break;
+      
       case 1: qtd_prof = cadastro_Professores(professores, qtd_prof); break;
+      
       case 2: if(qtd_prof>0)
         listar_pessoas(professores, qtd_prof);
         else
           printf("***NAO HA PROFESSORES CADASTRADOS***\n\n"); break;
+      
       case 3: if(qtd_prof>0)
         listar_pessoas_sexo(professores, qtd_prof);
         else
           printf("***NAO HA PROFESSORES CADASTRADOS***\n\n"); break;
-      case 4: break;
-      case 5: break;
+      
+      case 4: if(qtd_prof>0)
+        listarNome(professores, qtd_prof);
+        else
+          printf("***NAO HA PROFESSORES CADASTRADOS***\n\n"); break;
+      
+      case 5: if(qtd_prof>0)
+        listarData(professores, qtd_prof);
+        else
+          printf("***NAO HA PROFESSORES CADASTRADOS***\n\n"); break;
+      
       default: printf("***ENTRADA INVALIDA***\n\n");
     }
   }while(menu_prof!=0);
@@ -72,15 +84,19 @@ int cadastro_Professores(ficha_pessoa professores[], int qtd_prof){
 
     switch(menu_cadProf){
       case 0: break;
+      
       case 1: qtd_prof = insert_Pessoa(professores, qtd_prof); break;
+      
       case 2: if(qtd_prof>0)
         qtd_prof = exclude_Pessoa(professores, qtd_prof);
         else
           printf("***NAO HA PROFESSORES CADASTRADOS***\n\n"); break;
+      
       case 3: if(qtd_prof>0)
         update_Pessoa(professores, qtd_prof);
         else
           printf("***NAO HA PROFESSORES CADASTRADOS***\n\n"); break;
+      
       default: printf("***ENTRADA INVALIDA***\n\n");
     }
   }while(menu_cadProf!=0);

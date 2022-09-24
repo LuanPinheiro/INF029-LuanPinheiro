@@ -38,17 +38,29 @@ int menu_Alunos(ficha_pessoa alunos[], ficha_disciplina disciplinas[], int qtd_a
 
     switch(menu_alunos){
       case 0: break;
+      
       case 1: qtd_alunos = cadastro_Alunos(alunos, qtd_alunos); break;
+      
       case 2: if(qtd_alunos>0)
         listar_pessoas(alunos, qtd_alunos);
         else
           printf("***NAO HA ALUNOS CADASTRADOS***\n\n"); break;
+      
       case 3: if(qtd_alunos>0)
         listar_pessoas_sexo(alunos, qtd_alunos);
         else
           printf("***NAO HA ALUNOS CADASTRADOS***\n\n"); break;
-      case 4: break;
-      case 5: break;
+      
+      case 4: if(qtd_alunos>0)
+        listarNome(alunos, qtd_alunos);
+        else
+          printf("***NAO HA ALUNOS CADASTRADOS***\n\n"); break;
+      
+      case 5: if(qtd_alunos>0)
+        listarData(alunos, qtd_alunos);
+        else
+          printf("***NAO HA ALUNOS CADASTRADOS***\n\n"); break;
+      
       case 6: if(qtd_alunos>0 && qtd_disciplina>0)
         listarcad3(alunos, disciplinas, qtd_alunos, qtd_disciplina);
         else{
@@ -57,6 +69,7 @@ int menu_Alunos(ficha_pessoa alunos[], ficha_disciplina disciplinas[], int qtd_a
           if(qtd_alunos==0)
             printf("***NAO HA ALUNOS CADASTRADOS***\n\n");
         } break;
+      
       default: printf("***ENTRADA INVALIDA***\n\n");
     }
   }while(menu_alunos!=0);
@@ -80,15 +93,19 @@ int cadastro_Alunos(ficha_pessoa alunos[], int qtd_alunos){
 
     switch(menu_cadAluno){
       case 0: break;
+      
       case 1: qtd_alunos = insert_Pessoa(alunos,qtd_alunos); break;
+      
       case 2: if(qtd_alunos>0)
         qtd_alunos = exclude_Pessoa(alunos, qtd_alunos);
         else
           printf("***NAO HA ALUNOS CADASTRADOS***\n\n"); break;
+      
       case 3: if(qtd_alunos>0)
         update_Pessoa(alunos, qtd_alunos);
         else
           printf("***NAO HA ALUNOS CADASTRADOS***\n\n"); break;
+      
       default: printf("***ENTRADA INVALIDA***\n\n");
     }
   }while(menu_cadAluno!=0);
