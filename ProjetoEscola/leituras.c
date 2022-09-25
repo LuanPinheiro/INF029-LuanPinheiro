@@ -50,7 +50,7 @@ void lerNome(ficha_pessoa pessoa[], int index){
 }
 
 //****************** Função de leitura de CPF, recebe o vetor de struct e a posição que deve ler do usuário o CPF
-void lerCPF(ficha_pessoa pessoa[], int index){
+void lerCPF(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int index, int qtd_repete){
   int tam, erro;
   
   do{
@@ -65,15 +65,17 @@ void lerCPF(ficha_pessoa pessoa[], int index){
       if(tam>11)
       limparBuffer();
     }
-    /*else if(qtd>0 || qtd_repete>0){
-      pessoa[index].erroCPF = pessoaRepetida(pessoa, pessoa_repete, 0, qtd, qtd_repete, index);
-    }*/
     
-    if(erro == false)
+    if(erro==false)
       erro = validarCPF(pessoa[index].cpf);
+
+    if((index>0 || qtd_repete>0) && erro==false)
+      erro = CPF_Repetido(pessoa, pessoa_repete, index, qtd_repete);
 
     if(erro==true)
       printf("***ENTRADA INVALIDA***\n");
+    else if(erro==2)
+      printf("***ENTRADA INVALIDA - CPF REPETIDO***\n");
   }while(erro!=false);
 }
 
@@ -170,14 +172,17 @@ void lerCodigoDisc(ficha_disciplina disciplinas[], int index){
     if(tam!=6)
       erro = true;
 
-    if(erro == false){
+    if(erro==false){
       transformMaiusculo(disciplinas[index].codigo);
       erro = validarCodigo(disciplinas[index].codigo);
     }
+    if(erro==false && index>0)
+      erro = codigoRepetido(disciplinas, index);
     
-
     if(erro==true)
       printf("***ENTRADA INVALIDA***\n");
+    else if(erro==2)
+      printf("***ENTRADA INVALIDA - CODIGO REPETIDO***\n");
   }while(erro!=false);
 }
 

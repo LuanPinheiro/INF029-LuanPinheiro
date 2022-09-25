@@ -103,9 +103,9 @@ int main(){
     switch(menu_main){
       case 0: break;
       
-      case 1: qtd_alunos = menu_Alunos(alunos, disciplinas, qtd_alunos, qtd_disciplina); break;
+      case 1: qtd_alunos = menu_Alunos(alunos, professores, disciplinas, qtd_alunos, qtd_prof, qtd_disciplina); break;
       
-      case 2: qtd_prof = menu_Professores(professores, qtd_prof); break;
+      case 2: qtd_prof = menu_Professores(professores, alunos, disciplinas, qtd_prof, qtd_alunos, qtd_disciplina); break;
       
       case 3: qtd_disciplina = menu_Disciplinas(disciplinas, alunos, professores, qtd_disciplina, qtd_alunos, qtd_prof); break;
       

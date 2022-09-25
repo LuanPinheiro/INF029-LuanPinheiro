@@ -79,6 +79,7 @@ void listar_pessoas_sexo(ficha_pessoa pessoas[], int qtd){
 //****************** Lista uma disciplina com todos os seus dados, e seus alunos cadastrados
 void listar1disc(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int qtd_disciplina, int qtd_alunos){
   ficha_disciplina entrada[2];
+  int count;
 
   limparTela();
   printf("***Digite o codigo da disciplina que quer listar\n\n");
@@ -105,6 +106,8 @@ void listar1disc(ficha_disciplina disciplinas[], ficha_pessoa alunos[], int qtd_
       break;
     }
   }
+  if(count==0)
+    printf("***NAO HA ALUNOS CADASTRADOS NESSA DISCIPLINA***\n\n");
 }
 
 //****************** Lista alunos que estão matriculados em menos de 3 disciplinas

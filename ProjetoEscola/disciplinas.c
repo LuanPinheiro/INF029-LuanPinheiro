@@ -237,7 +237,10 @@ void update_Disciplina(ficha_disciplina disciplinas[], ficha_pessoa professores[
           case 1: lerNomeDisc(disciplinas, i); break;
           case 2: lerCodigoDisc(disciplinas, i); break;
           case 3: lerSemestreDisc(disciplinas, i); break;
-          case 4: ProfessorDisc(disciplinas, professores, qtd_disciplina, qtd_prof); break;
+          case 4: if(qtd_prof>0)
+            ProfessorDisc(disciplinas, professores, qtd_disciplina, qtd_prof);
+            else
+              printf("***NAO HA PROFESSORES CADASTRADOS***\n\n"); break;
           default: printf("***ENTRADA INVALIDA***\n\n");
         }
       }
@@ -400,21 +403,18 @@ void exclude_AlunoDisc(ficha_disciplina disciplinas[], ficha_pessoa alunos[], in
     }
   }
 }
-//****************** SE DER TEMPO IMPLEMENTAR ESSA FUNÇÃO CORRIGIDA - Checa se há algum código de disciplina repetido em outra disciplina já cadastrada, retorna 2 caso encontre alguma igual
-/*int codigoRepetido(ficha_disciplina disciplina[], int index){
+//****************** Checa se há algum código de disciplina repetido em outra disciplina já cadastrada, retorna 2 caso encontre alguma igual
+int codigoRepetido(ficha_disciplina disciplinas[], int index){
   int repetido = false;
-
-  transformMaiusculo(disciplina[index].codigo);
   
-  for(int i=0;i<index;i++){
-    for(int j=0;disciplina[i].codigo[j]!='\0';j++){
-      if(disciplina[index].codigo[j]!=disciplina[i].codigo[j]){
-        repetido = false;
+  for(int i=0, count=0;count<index;i++)
+    if(disciplinas[i].cadastrado==true){
+      if(strcmp(disciplinas[index].codigo, disciplinas[i].codigo)==0){
+        repetido=2;
         break;
       }
+      count++;
     }
-    repetido = 2;
-  }
 
   return repetido;
-}*/
+}

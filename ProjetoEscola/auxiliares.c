@@ -187,7 +187,7 @@ void instrucoes(){
   printf("-> De apenas 1 caractere\n-> Apenas f/m/o\n-> Apos a entrada o caracter se tornara maiusculo\n-> EXEMPLO: M\n\n");
 
   printf("CPF:\n");
-  printf("-> De ate 11 caracteres\n-> Apenas numeros\n-> Deve seguir as regras reais de validacao de um CPF, portanto indique um CPF valido\n-> EXEMPLO: 86409822529\n\n");
+  printf("-> De ate 11 caracteres\n-> Apenas numeros\n-> Deve seguir as regras reais de validacao de um CPF, portanto indique um CPF valido e UNICO\n-> EXEMPLO: 86409822529\n\n");
 
   printf("Codigo:\n");
   printf("-> De ate 6 caracteres\n-> Apenas letras nos 3 primeiros caracteres e apenas numeros nos 3 ultimos caracteres\n-> Todas as letras se tornarao maiusculas apos a entrada\n-> EXEMPLO: INF029\n\n");

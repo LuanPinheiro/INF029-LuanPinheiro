@@ -23,7 +23,7 @@ typedef struct{
 }ficha_disciplina;
 
 //****************** Menu dos alunos, redireciona para todas as funções de cadastro e relatório de alunos
-int menu_Alunos(ficha_pessoa alunos[], ficha_disciplina disciplinas[], int qtd_alunos, int qtd_disciplina){
+int menu_Alunos(ficha_pessoa alunos[], ficha_pessoa professores[], ficha_disciplina disciplinas[], int qtd_alunos, int qtd_prof, int qtd_disciplina){
   int menu_alunos;
 
   do{
@@ -39,7 +39,7 @@ int menu_Alunos(ficha_pessoa alunos[], ficha_disciplina disciplinas[], int qtd_a
     switch(menu_alunos){
       case 0: break;
       
-      case 1: qtd_alunos = cadastro_Alunos(alunos, qtd_alunos); break;
+      case 1: qtd_alunos = cadastro_Alunos(alunos, professores, disciplinas, qtd_alunos, qtd_prof, qtd_disciplina); break;
       
       case 2: if(qtd_alunos>0)
         listar_pessoas(alunos, qtd_alunos);
@@ -78,7 +78,7 @@ int menu_Alunos(ficha_pessoa alunos[], ficha_disciplina disciplinas[], int qtd_a
 }
 
 //****************** Menu que direciona para as funções de cadastro de alunos
-int cadastro_Alunos(ficha_pessoa alunos[], int qtd_alunos){
+int cadastro_Alunos(ficha_pessoa alunos[], ficha_pessoa professores[], ficha_disciplina disciplinas[], int qtd_alunos, int qtd_prof, int qtd_disciplina){
   int menu_cadAluno;
 
   do{
@@ -94,10 +94,10 @@ int cadastro_Alunos(ficha_pessoa alunos[], int qtd_alunos){
     switch(menu_cadAluno){
       case 0: break;
       
-      case 1: qtd_alunos = insert_Pessoa(alunos,qtd_alunos); break;
+      case 1: qtd_alunos = insert_Pessoa(alunos, professores, qtd_alunos, qtd_prof); break;
       
       case 2: if(qtd_alunos>0)
-        qtd_alunos = exclude_Pessoa(alunos, qtd_alunos);
+        qtd_alunos = exclude_Aluno(alunos, disciplinas, qtd_alunos, qtd_disciplina);
         else
           printf("***NAO HA ALUNOS CADASTRADOS***\n\n"); break;
       
@@ -110,5 +110,50 @@ int cadastro_Alunos(ficha_pessoa alunos[], int qtd_alunos){
     }
   }while(menu_cadAluno!=0);
   
+  return qtd_alunos;
+}
+
+//****************** Função que faz exclusão lógica de um aluno, através da modificação de uma variavel que funciona como uma flag se o aluno está cadastrado ou não. E diminui o contador de alunos cadastrados
+int exclude_Aluno(ficha_pessoa alunos[], ficha_disciplina disciplinas[], int qtd_alunos, int qtd_disciplina){
+  int op, i;
+
+  do{
+    limparTela();
+    listar_pessoas(alunos, qtd_alunos);
+    printf("(Digite 0 para voltar)\n");
+    printf("Digite o #numero da pessoa que quer excluir: ");
+    scanf("%d", &op);
+    getchar();
+    
+    if(op<0 || op>qtd_alunos)
+      printf("\n***ENTRADA INVALIDA***\n");
+  }while(op<0 || op>qtd_alunos);
+
+  if(op==0){
+    printf("\n***VOLTANDO***\n");
+  }
+  else{
+    i = trueIndexPessoa(op, alunos);
+
+    for(int j=0, count=0;count<qtd_disciplina;j++)
+      if(disciplinas[j].cadastrado==true){
+        for(int k=0, count2=0;count2<disciplinas[j].qtdMat;k++)
+          if(disciplinas[j].alunosMatriculados[k]!=-1){
+            if(disciplinas[j].alunosMatriculados[k]==i){
+              disciplinas[j].alunosMatriculados[k]=-1;
+              disciplinas[j].qtdMat--;
+            }
+              
+            count2++;
+          }
+        count++;
+      }
+    
+    alunos[i].cadastrado=false;
+    qtd_alunos--;
+
+    printf("\n***ALUNO #%d EXCLUIDO***\n", op);
+  }
+
   return qtd_alunos;
 }

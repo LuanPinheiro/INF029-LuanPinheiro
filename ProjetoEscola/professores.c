@@ -23,7 +23,7 @@ typedef struct{
 }ficha_disciplina;
 
 // Menu dos professores, redireciona para todas as funções de cadastro e relatório de professores
-int menu_Professores(ficha_pessoa professores[], int qtd_prof){
+int menu_Professores(ficha_pessoa professores[], ficha_pessoa alunos[], ficha_disciplina disciplinas[], int qtd_prof, int qtd_alunos, int qtd_disciplina){
   int menu_prof;
 
   do{
@@ -39,7 +39,7 @@ int menu_Professores(ficha_pessoa professores[], int qtd_prof){
     switch(menu_prof){
       case 0: break;
       
-      case 1: qtd_prof = cadastro_Professores(professores, qtd_prof); break;
+      case 1: qtd_prof = cadastro_Professores(professores, alunos, disciplinas, qtd_prof, qtd_alunos, qtd_disciplina); break;
       
       case 2: if(qtd_prof>0)
         listar_pessoas(professores, qtd_prof);
@@ -69,7 +69,7 @@ int menu_Professores(ficha_pessoa professores[], int qtd_prof){
 }
 
 // Menu que direciona para as funções de cadastro de professores
-int cadastro_Professores(ficha_pessoa professores[], int qtd_prof){
+int cadastro_Professores(ficha_pessoa professores[], ficha_pessoa alunos[], ficha_disciplina disciplinas[], int qtd_prof, int qtd_alunos, int qtd_disciplina){
   int menu_cadProf;
 
   do{
@@ -85,10 +85,10 @@ int cadastro_Professores(ficha_pessoa professores[], int qtd_prof){
     switch(menu_cadProf){
       case 0: break;
       
-      case 1: qtd_prof = insert_Pessoa(professores, qtd_prof); break;
+      case 1: qtd_prof = insert_Pessoa(professores, alunos, qtd_prof, qtd_alunos); break;
       
       case 2: if(qtd_prof>0)
-        qtd_prof = exclude_Pessoa(professores, qtd_prof);
+        qtd_prof = exclude_Professor(professores, disciplinas, qtd_prof, qtd_disciplina);
         else
           printf("***NAO HA PROFESSORES CADASTRADOS***\n\n"); break;
       
@@ -100,6 +100,44 @@ int cadastro_Professores(ficha_pessoa professores[], int qtd_prof){
       default: printf("***ENTRADA INVALIDA***\n\n");
     }
   }while(menu_cadProf!=0);
+
+  return qtd_prof;
+}
+
+//****************** Função que faz exclusão lógica de um professor, através da modificação de uma variavel que funciona como uma flag se o professor está cadastrado ou não. E diminui o contador de professores cadastrados, e retira seu nome das disciplinas em que esteja cadastrado
+int exclude_Professor(ficha_pessoa professores[], ficha_disciplina disciplinas[], int qtd_prof, int qtd_disciplina){
+  int op, i;
+
+  do{
+    limparTela();
+    listar_pessoas(professores, qtd_prof);
+    printf("(Digite 0 para voltar)\n");
+    printf("Digite o #numero da pessoa que quer excluir: ");
+    scanf("%d", &op);
+    getchar();
+    
+    if(op<0 || op>qtd_prof)
+      printf("\n***ENTRADA INVALIDA***\n");
+  }while(op<0 || op>qtd_prof);
+
+  if(op==0){
+    printf("\n***VOLTANDO***\n");
+  }
+  else{
+    i = trueIndexPessoa(op, professores);
+
+    for(int j=0, count=0;count<qtd_disciplina;j++)
+      if(disciplinas[j].cadastrado==true){
+        if(strcmp(disciplinas[j].nome_p, professores[i].nome)==0)
+          strcpy(disciplinas[j].nome_p, "(PROFESSOR EXCLUIDO)");
+        count++;
+      }
+      
+    professores[i].cadastrado=false;
+    qtd_prof--;
+
+    printf("\n***PROFESSOR #%d EXCLUIDO***\n", op);
+  }
 
   return qtd_prof;
 }

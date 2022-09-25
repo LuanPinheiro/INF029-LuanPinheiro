@@ -24,13 +24,13 @@ typedef struct{
 }ficha_disciplina;
 
 //****************** Função de cadastrar uma nova pessoa(aluno ou professor), com validações para cada entrada
-int insert_Pessoa(ficha_pessoa pessoa[], int qtd){
+int insert_Pessoa(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int qtd, int qtd_repete){
   
   limparTela();
 
   //Todas as entradas são validadas em suas respectivas funções
   lerNome(pessoa, qtd);
-  lerCPF(pessoa, qtd);
+  lerCPF(pessoa, pessoa_repete, qtd, qtd_repete);
   pessoa[qtd].matricula = AddMatricula();
   lerDataNasc(pessoa, qtd);
   lerSexo(pessoa, qtd);
@@ -40,37 +40,6 @@ int insert_Pessoa(ficha_pessoa pessoa[], int qtd){
   qtd++;
   printf("\nCadastro Realizado com Sucesso\n");
   
-  return qtd;
-}
-
-//****************** Função que faz exclusão lógica de uma pessoa, através da modificação de uma variavel que funciona como uma flag se a pessoa está cadastrado ou não. E diminui o contador de pessoas cadastradas
-int exclude_Pessoa(ficha_pessoa pessoa[], int qtd){
-  //******************************************************************************************************************************************************************************************SERÁ NECESSÁRIO DIVIDIR ESSA FUNÇÃO ENTRE DUAS DIFERENTES:PROFESSORES E ALUNOS, POIS NA EXCLUSÃO HÁ DETALHES DISTINTOS, PRINCIPALMENTE NA RELAÇÃO ENTRE OS DADOS E AS DISCIPLINAS //******************************************************************************************************************************************************************************************AO EXCLUIR UM ALUNO, TERÁ QUE SAIR TAMBÉM OS DADOS DELE DAS DISCIPLINAS: SEU INDICE NOS MATRICULADOS. E NOS PROFESSORES: SAIR SEU NOME DAS DISCIPLINAS EM QUE ESTÁ MATRICULADO
-  int op, i;
-
-  do{
-    limparTela();
-    listar_pessoas(pessoa, qtd);
-    printf("(Digite 0 para voltar)\n");
-    printf("Digite o #numero da pessoa que quer excluir: ");
-    scanf("%d", &op);
-    getchar();
-    
-    if(op<0 || op>qtd)
-      printf("\n***ENTRADA INVALIDA***\n");
-  }while(op<0 || op>qtd);
-
-  if(op==0){
-    printf("\n***VOLTANDO***\n");
-  }
-  else{
-    i = trueIndexPessoa(op, pessoa);
-    pessoa[i].cadastrado=false;
-    qtd--;
-
-    printf("\n***PESSOA #%d EXCLUIDA***\n", op);
-  }
-
   return qtd;
 }
 
@@ -180,45 +149,28 @@ void aniversariantes (ficha_pessoa alunos[], ficha_pessoa professores[], int qtd
     
 }
 
-//****************** SE DER TEMPO IMPLEMENTAR ESSE FUNÇÃO CORRIGIDA- Checa se há alguma string na struct aluno ou professor, dado um código de qual informação avaliar e o indice na struct a ser checada, retorna 2 caso encontre erro
-/*int pessoaRepetida(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int cod, int qtd, int qtd_repete, int index){
-  int i=0, j=0, repetido;
+//****************** Checa se há algum CPF repetido entre professores e alunos
+int CPF_Repetido(ficha_pessoa pessoa[], ficha_pessoa pessoa_repete[], int qtd, int qtd_repete){
+  int i, count, repetido=false;
 
-  // cod 0: CPF / 1: Matricula
-  if(cod==0){
-    // Checando se há CPF igual entre o mesmo tipo. ex: prof-prof, aluno-aluno
-    for(i=0, repetido=2;i<qtd;i++)
-      for(j=0;pessoa[i].cpf[j]!='\0';j++)
-        if(pessoa[index].cpf[j]!=pessoa[i].cpf[j]){
-          repetido = 0;
+  for(i=0, count=0;count<qtd;i++)
+    if(pessoa[i].cadastrado==true){
+      if(strcmp(pessoa[qtd].cpf, pessoa[i].cpf)==0){
+        repetido=2;
+        break;
+      }
+      count++;
+    }
+
+  if(repetido==false)
+    for(i=0, count=0;count<qtd_repete;i++)
+      if(pessoa_repete[i].cadastrado==true){
+        if(strcmp(pessoa[qtd].cpf, pessoa_repete[i].cpf)==0){
+          repetido=2;
           break;
         }
-    // Checando se há CPF igual entre tipos diferentes. ex: prof-aluno, aluno-prof
-    if(repetido==0 && qtd_repete>0)
-      for(i=0, repetido=2;i<qtd_repete;i++)
-        for(j=0;pessoa_repete[i].cpf[j]!='\0';j++)
-          if(pessoa[index].cpf[j]!=pessoa_repete[i].cpf[j]){
-            repetido = 0;
-            break;
-          }
-  } 
-  else if(cod==1){
-    // Checando se há Matricula igual entre o mesmo tipo. ex: prof-prof, aluno-aluno
-    for(i=0, repetido=2;i<qtd;i++)
-      for(j=0;pessoa[i].matricula[j]!='\0';j++)
-        if(pessoa[index].matricula[j]!=pessoa[i].matricula[j]){
-          repetido = 0;
-          break;
-        }
-    // Checando se há Matricula igual entre tipos diferentes. ex: prof-aluno, aluno-prof
-    if(repetido==0 && qtd_repete>0)
-      for(i=0, repetido=2;i<qtd_repete;i++)
-        for(j=0;pessoa_repete[i].matricula[j]!='\0';j++)
-          if(pessoa[index].matricula[j]!=pessoa_repete[i].matricula[j]){
-            repetido = 0;
-            break;
-          }
-  }
+        count++;
+      }
 
   return repetido;
-}*/
+}

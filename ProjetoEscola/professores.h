@@ -1,2 +1,3 @@
-int menu_Professores(ficha_pessoa professores[], int qtd_prof);
-int cadastro_Professores(ficha_pessoa professores[], int qtd_prof);
+int menu_Professores(ficha_pessoa professores[], ficha_pessoa alunos[], ficha_disciplina disciplinas[], int qtd_prof, int qtd_alunos, int qtd_disciplina);
+int cadastro_Professores(ficha_pessoa professores[], ficha_pessoa alunos[], ficha_disciplina disciplinas[], int qtd_prof, int qtd_alunos, int qtd_disciplina);
+int exclude_Professor(ficha_pessoa professores[], ficha_disciplina disciplinas[], int qtd_prof, int qtd_disciplina);
