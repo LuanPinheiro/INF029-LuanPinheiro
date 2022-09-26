@@ -73,23 +73,6 @@ int main(){
   ficha_disciplina disciplinas[vet_size];
   int qtd_disciplina = 0;
 
-  //Para debug
-  strcpy(alunos[0].nome, "LUAN");
-  alunos[0].matricula = 10000;
-  strcpy(alunos[0].cpf, "86409822529");
-  strcpy(alunos[0].dataNasc, "5/5/2001");
-  strcpy(alunos[0].sexo, "M");
-  alunos[0].cadastrado = true;
-  qtd_alunos++;
-
-  strcpy(professores[0].nome, "RENATO");
-  professores[0].matricula = 9999;
-  strcpy(professores[0].cpf, "52998224725");
-  strcpy(professores[0].dataNasc, "2/10/1985");
-  strcpy(professores[0].sexo, "M");
-  professores[0].cadastrado = true;
-  qtd_prof++;
-
   do{
     limparTela();
     imprimir_linhas();
