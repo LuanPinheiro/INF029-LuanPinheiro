@@ -281,26 +281,22 @@ int q5(int num)
 
 int q6(int numerobase, int numerobusca)
 {
-	int i, numero_isolado, num_aux, qtdOcorrencias=0;
+	int i, numero_isolado, num_aux, num_aux2, qtdOcorrencias=0;
 
-	printf("[%d][%d]\n", numerobase, numerobusca);
 	while(numerobase>0){
-		numero_isolado = numerobase % 10;
-		num_aux = numerobusca / 10;
+		numero_isolado = numerobase % 10; // Numero, dentro do numerobase, que será comparado com o numerobusca
+		num_aux = numerobusca / 10; // Auxiliar que ajuda a definir, junto com o for abaixo, quantas casas decimais tem o numerobusca
+		num_aux2 = numerobase / 10; // Auxiliar que será usada no for abaixo, para definir um numero isolado, com a mesma quantidade de casas decimais que o numerobusca
 
-		for(i = 10; num_aux > 0; i *= 10){
-			numero_isolado += (numerobase % 10)*10;
-			num_aux /= 10;
+		for(i = 10; num_aux > 0; i *= 10, num_aux /= 10){ // For que irá funcionar apenas se houver mais de uma casa decimal, colocando mais casas com numeros posteriores dentro do numero_isolado
+			numero_isolado += (num_aux2 % 10)*i;
 		}
-		printf("--%d--", numero_isolado);
 		
-		if(numero_isolado==numerobusca){
-			printf("<=");
+		if(numero_isolado==numerobusca){ // Checando se o numero que foi isolado é igual ao que esta sendo buscado
 			qtdOcorrencias++;
 		}
 		
 		numerobase /= 10;
 	}
-	printf("[%d]\n", qtdOcorrencias);
 	return qtdOcorrencias;
 }
