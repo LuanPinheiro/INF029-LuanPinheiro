@@ -97,3 +97,10 @@ int anoInt(char validNasc[]){
 
   return ano;
 }
+
+//****************** Se houver letras minusculas transformará em maiuscula para padronização do modelo das strings
+void transformMaiusculo(char string[]){
+  for(int i=0;string[i]!='\0';i++)
+    if(string[i]>=97 && string[i]<=122)
+      string[i] -= 32;
+}
