@@ -14,13 +14,14 @@ int validarData(int dia, int mes, int ano){
     
   else{
     if (mes != 2) {
-      if (mes == 4 || mes == 6 || mes == 9 || mes == 11)
+      if (mes == 4 || mes == 6 || mes == 9 || mes == 11){
         if (dia > 30){
 					return false;
 				}
+      } 
     } 
     else{
-      if (ano % 4 == 0 && ano % 100 != 0){
+      if(ano % 4 == 0 && (ano % 100 != 0 || ano % 400 == 0)){
 				if (dia > 29){
 					return false;
 				}

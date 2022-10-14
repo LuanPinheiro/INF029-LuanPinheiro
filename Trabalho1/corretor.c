@@ -34,8 +34,8 @@ int main()
     //testSomar();
     //testFatorial();
     //testQ1();
-    //testQ2();
-    testQ3();
+    testQ2();
+    //testQ3();
     //testQ4();
     //testQ5();
     //testQ6();
@@ -126,6 +126,8 @@ void testQ2()
     printf("%d\n", dma.qtdDias == 1);
     printf("%d\n", dma.qtdMeses == 1);
     printf("%d\n", dma.qtdAnos == 0);
+
+    getchar();
 }
 
 void testQ3()
@@ -137,7 +139,6 @@ void testQ3()
     printf("%d\n", q3(str, 'l', 1) == 0);
     printf("%d\n", q3(str, 'l', 0) == 1);
     printf("%d\n", q3(str, 'L', 0) == 1);
-    getchar();
 }
 
 void testQ4()

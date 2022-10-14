@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <string.h>
 #include "LuanPinheiro2019116025.h"
 #include "extra.h" // Todas as funções extras que serão criadas
 
@@ -184,27 +183,132 @@ int q1(char data[])
 DiasMesesAnos q2(char datainicial[], char datafinal[])
 {
 
-    //calcule os dados e armazene nas três variáveis a seguir
-    DiasMesesAnos dma;
+  //calcule os dados e armazene nas três variáveis a seguir
+  DiasMesesAnos dma;
 
-    if (q1(datainicial) == 0){
-      dma.retorno = 2;
-      return dma;
-    }else if (q1(datafinal) == 0){
-      dma.retorno = 3;
-      return dma;
-    }else{
-      //verifique se a data final não é menor que a data inicial
-      
-      //calcule a distancia entre as datas
+  if (q1(datainicial) == 0){
+    dma.retorno = 2;
+    return dma;
+  }
+  else if (q1(datafinal) == 0){
+    dma.retorno = 3;
+    return dma;
+  }
+  else{
+    //verifique se a data final não é menor que a data inicial
+    int diaInicial = diaInt(datainicial);
+    int mesInicial = mesInt(datainicial);
+    int anoInicial = anoInt(datainicial);
+    int diaFinal = diaInt(datafinal);
+    int mesFinal = mesInt(datafinal);
+    int anoFinal = anoInt(datafinal);
 
-
-      //se tudo der certo
-      dma.retorno = 1;
+    if(anoInicial > anoFinal){
+      dma.retorno = 4;
       return dma;
-      
+    }
+    else if(anoInicial == anoFinal){
+      if(mesInicial > mesFinal){
+        dma.retorno = 4;
+        return dma;
+      }
+      else if(mesInicial == mesFinal){
+        if(diaInicial > diaFinal){
+          dma.retorno = 4;
+          return dma;
+        }
+      }
     }
     
+    //calcule a distancia entre as datas
+    dma.qtdDias = 0;
+    dma.qtdMeses = 0;
+    dma.qtdAnos = 0;
+
+    // O diaInicial, mesInicial e anoInicial irá avançar até serem iguais, nesse caminho será calculado em paralelo a quantidade de dias meses e anos percorridos, com seus meses de diferentes dias
+    for(int diaDma = diaInicial, mesDma = mesInicial, anoDma = anoInicial, mesMudou = false, mesMudouDma = false; diaInicial != diaFinal || mesInicial != mesFinal || anoInicial != anoFinal;){
+      diaInicial++;
+      if(mesInicial == 2){
+        if(anoInicial % 4 == 0 && (anoInicial % 100 != 0 || anoInicial % 400 == 0)){
+          if(diaInicial > 29){
+            mesMudou = true;
+          }
+        }
+        else{
+          if(diaInicial > 28){
+            mesMudou = true;
+          }
+        }
+      }
+      else{
+        if(mesInicial == 4 || mesInicial == 6 || mesInicial == 9 || mesInicial == 11){
+          if(diaInicial > 30)
+          {
+            mesMudou = true;
+          }
+        }
+        else{
+          if(diaInicial > 31){
+            mesMudou = true;
+          }
+        }
+      }
+      if(mesMudou == true){
+        diaInicial = 0;
+        mesInicial++;
+        if(mesInicial > 12){
+          mesInicial = 1;
+          anoInicial++;
+        }
+        mesMudou = false;
+      }
+
+      // Quantidade de dias meses e anos em paralelo, sua principal diferença é iniciar com a contagem de dias em 1, diferente do código acima, que inicia não necessariamente no dia 1 do mês
+      dma.qtdDias++;
+      if(mesDma == 2){
+        if(anoDma % 4 == 0 && (anoDma % 100 != 0 || anoDma % 400 == 0)){
+          if(dma.qtdDias > 29){
+            mesMudouDma = true;
+          }
+        }
+        else{
+          if(dma.qtdDias > 28){
+            mesMudouDma = true;
+          }
+        }
+      }
+      else{
+        if(mesDma == 4 || mesDma == 6 || mesDma == 9 || mesDma == 11){
+          if(dma.qtdDias > 30)
+          {
+            mesMudouDma = true;
+          }
+        }
+        else{
+          if(dma.qtdDias > 31){
+            mesMudouDma = true;
+          }
+        }
+      }
+      if(mesMudouDma == true){
+        dma.qtdDias = 0;
+        dma.qtdMeses++;
+        if(dma.qtdMeses == 12){
+          dma.qtdMeses = 0;
+          dma.qtdAnos++;
+        }
+        mesDma++;
+        if(mesDma > 12){
+          mesDma = 1;
+          anoDma++;
+        }
+        mesMudouDma = false;
+      }
+    }
+    //se tudo der certo
+    dma.retorno = 1;
+    return dma;
+  }
 }
 
 /*
