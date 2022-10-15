@@ -357,8 +357,31 @@ int q3(char *texto, char c, int isCaseSensitive)
  */
 int q4(char *strTexto, char *strBusca, int posicoes[30])
 {
-    int qtdOcorrencias = -1;
+    int qtdOcorrencias = 0;
+    int tamanhoBusca = strlen(strBusca);
+    int indexTexto, indexBusca, indexTextoAux, countPosicoes;
 
+    printf("STRING: %s\n", strTexto);
+    printf("STRING BUSCA: %s\n", strBusca);
+    for(indexTexto = 0, countPosicoes = 0; strTexto[indexTexto] != '\0'; indexTexto++){
+        if(strTexto[indexTexto] == strBusca[0]){
+            printf("Encontrado possivel comeco em: %d\n", indexTexto);
+            for(indexTextoAux = indexTexto, indexBusca = 0; strBusca[indexBusca] != '\0'; indexBusca++, indexTextoAux++){
+                if(strTexto[indexTextoAux] != strBusca[indexBusca]){
+                    printf("NAO ENCONTRADO STRING COMPLETA\n");
+                    break;
+                }
+            }
+            if(indexBusca == tamanhoBusca){
+                printf("ADICIONOU POSICOES, %d e %d\n", indexTexto+1, indexTextoAux);
+                posicoes[countPosicoes] = indexTexto + 1;
+                posicoes[countPosicoes+1] = indexTextoAux;
+                countPosicoes += 2;
+                indexTexto = indexTextoAux-1;
+                qtdOcorrencias++;
+            }
+        }
+    }
     return qtdOcorrencias;
 }
 
