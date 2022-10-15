@@ -16,8 +16,8 @@
 
 #include <stdio.h>
 #include <string.h>
-
-//renomeie o arquivo do include abaixo para PrimeiroUltimoNomeMATRICULA.h
+#include <stdlib.h>
+#include <locale.h>
 #include "LuanPinheiro2019116025.h"
 
 void testSomar();    //função utilizada para testes
@@ -31,14 +31,15 @@ void testQ6();
 
 int main()
 {
-    //testSomar();
-    //testFatorial();
-    //testQ1();
+    setlocale(LC_ALL, "Portuguese");
+    testSomar();
+    testFatorial();
+    testQ1();
     testQ2();
-    //testQ3();
-    //testQ4();
-    //testQ5();
-    //testQ6();
+    testQ3();
+    testQ4();
+    testQ5();
+    testQ6();
 }
 
 void testSomar()
@@ -126,8 +127,6 @@ void testQ2()
     printf("%d\n", dma.qtdDias == 1);
     printf("%d\n", dma.qtdMeses == 1);
     printf("%d\n", dma.qtdAnos == 0);
-
-    getchar();
 }
 
 void testQ3()
