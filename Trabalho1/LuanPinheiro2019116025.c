@@ -151,19 +151,11 @@ DataQuebrada quebraData(char data[]){
  */
 int q1(char data[])
 {
-  int datavalida = 1;
-	
   // Conversão de Dias, Mêses em inteiros
   int dia = diaInt(data);
   int mes = mesInt(data);
   int ano = anoInt(data);
-
-	datavalida = validarData(dia, mes, ano);
-
-  if (datavalida==1)
-      return 1;
-  else
-      return 0;
+  return validarData(dia, mes, ano);
 }
 
 /*
@@ -182,7 +174,6 @@ int q1(char data[])
  */
 DiasMesesAnos q2(char datainicial[], char datafinal[])
 {
-
   //calcule os dados e armazene nas três variáveis a seguir
   DiasMesesAnos dma;
 
@@ -325,7 +316,7 @@ int q3(char *texto, char c, int isCaseSensitive)
 {
     int qtdOcorrencias = 0;
 
-    if(isCaseSensitive == 1){
+    if(isCaseSensitive == 1){ // Se é Case Sensitive, só vai haver ocorrência se for exatamente o mesmo caractere
       for(int i = 0; texto[i] != '\0'; i++){
         if(texto[i] == c){
           qtdOcorrencias++;
@@ -333,11 +324,10 @@ int q3(char *texto, char c, int isCaseSensitive)
       }
     }
     else{
-      char upperCaseString[250];
-      strcpy(upperCaseString, texto);
-
+      char upperCaseString[250]; // Criando uma cópia(para não alterar a string original), para deixar tudo em caixa alta
+      strcpy(upperCaseString, texto); 
       transformMaiusculo(upperCaseString);
-      if(c >= 97 && c <= 122){
+      if(c >= 97 && c <= 122){ // Caractere em caixa alta, igual a string que será comparada
         c -= 32;
       }
 
@@ -386,14 +376,13 @@ int q5(int num)
 {
 	int num_invertido = 0, resto;
 
+  // Começando da direita para esquerda, isola cada numero em 1 unidade, e vai inserindo esse número em uma nova variavel
 	while(num>0){
-		resto = num%10;
-		num_invertido = (num_invertido*10)+resto;
+		resto = num % 10; 
+		num_invertido = (num_invertido * 10) + resto;
 		num /= 10;
 	}
-	num = num_invertido;
-
-  return num;
+  return num_invertido;
 }
 
 /*
@@ -408,9 +397,9 @@ int q5(int num)
 
 int q6(int numerobase, int numerobusca)
 {
-	int i, numero_isolado, num_aux, num_aux2, qtdOcorrencias=0;
+	int i, numero_isolado, num_aux, num_aux2, qtdOcorrencias = 0;
 
-	while(numerobase>0){
+	while(numerobase > 0){
 		numero_isolado = numerobase % 10; // Numero, dentro do numerobase, que será comparado com o numerobusca
 		num_aux = numerobusca / 10; // Auxiliar que ajuda a definir, junto com o for abaixo, quantas casas decimais tem o numerobusca
 		num_aux2 = numerobase / 10; // Auxiliar que será usada no for abaixo, para definir um numero isolado, com a mesma quantidade de casas decimais que o numerobusca
@@ -419,7 +408,7 @@ int q6(int numerobase, int numerobusca)
 			numero_isolado += (num_aux2 % 10)*i;
 		}
 		
-		if(numero_isolado==numerobusca){ // Checando se o numero que foi isolado é igual ao que esta sendo buscado
+		if(numero_isolado == numerobusca){ // Checando se o numero que foi isolado é igual ao que esta sendo buscado
 			qtdOcorrencias++;
 		}
 		
