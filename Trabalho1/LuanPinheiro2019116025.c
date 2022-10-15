@@ -361,23 +361,19 @@ int q4(char *strTexto, char *strBusca, int posicoes[30])
     int tamanhoBusca = strlen(strBusca);
     int indexTexto, indexBusca, indexTextoAux, countPosicoes;
 
-    printf("STRING: %s\n", strTexto);
-    printf("STRING BUSCA: %s\n", strBusca);
+    // For irá percorrer a strTexto
     for(indexTexto = 0, countPosicoes = 0; strTexto[indexTexto] != '\0'; indexTexto++){
-        if(strTexto[indexTexto] == strBusca[0]){
-            printf("Encontrado possivel comeco em: %d\n", indexTexto);
-            for(indexTextoAux = indexTexto, indexBusca = 0; strBusca[indexBusca] != '\0'; indexBusca++, indexTextoAux++){
+        if(strTexto[indexTexto] == strBusca[0]){ // Caso a posição atual seja igual ao começo da string de busca, é uma potencial ocorrencia
+            for(indexTextoAux = indexTexto, indexBusca = 0; strBusca[indexBusca] != '\0'; indexBusca++, indexTextoAux++){ // Com uso de uma variavel auxiliar(que ficará com o indice da strTexto), irá continuar a percorrer a strTexto
                 if(strTexto[indexTextoAux] != strBusca[indexBusca]){
-                    printf("NAO ENCONTRADO STRING COMPLETA\n");
-                    break;
+                    break; // Caso esse recorte da strTexto não seja igual a strBusca o código para aqui
                 }
             }
-            if(indexBusca == tamanhoBusca){
-                printf("ADICIONOU POSICOES, %d e %d\n", indexTexto+1, indexTextoAux);
-                posicoes[countPosicoes] = indexTexto + 1;
+            if(indexBusca == tamanhoBusca){ // Caso não ocorra o break acima essa condição é verdadeira e uma nova ocorrencia é registrada
+                posicoes[countPosicoes] = indexTexto + 1; // Posição em que começou a ocorrencia(+1 por que a contagem inicia em 1)
                 posicoes[countPosicoes+1] = indexTextoAux;
                 countPosicoes += 2;
-                indexTexto = indexTextoAux-1;
+                indexTexto = indexTextoAux - 1; // Como a strBusca foi encontrada não é necessário percorrer as letras anteriores  na ocorrencia em strTexto, e como o indexTextoAux é de valor 1 acima do indice real é necessário subtrair 1
                 qtdOcorrencias++;
             }
         }
