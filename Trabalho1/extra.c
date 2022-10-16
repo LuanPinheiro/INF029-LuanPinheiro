@@ -4,7 +4,7 @@
 //****************** Checa se é uma data válida, inclui validação de ano bissexto
 int validarData(int dia, int mes, int ano){
   //Validação de Ano
-  if(ano <= 0)
+  if(ano < 0)
     return false;
 
   //Validação de dias e meses
@@ -90,11 +90,18 @@ int diaInt(char validNasc[]){
 
 //****************** Função que retorna o ano em inteiro dada a string de data
 int anoInt(char validNasc[]){
-  int ano, tam;
+  int ano = 0, index, soma, strCount = 0;
   
-  tam = strlen(validNasc);
-  tam--;
-  ano = ((validNasc[tam-3]-48)*1000) + ((validNasc[tam-2]-48)*100) + ((validNasc[tam-1]-48)*10) + (validNasc[tam]-48);
+  for(index = strlen(validNasc)-1; validNasc[index] != '/'; strCount++, index--){
+    soma = validNasc[index]-48; // Isolando um algarismo
+    for(int i = 0; i < strCount; i++){
+      soma *= 10; // Várias multiplicações por 10 para encontrar seu valor real, ex: 2015, o valor 2 vai ser multiplicado até ser 2000
+    }
+    ano += soma; // Colocando o valor real na variável que será a saída
+  }
+  if(strCount < 2 || strCount > 4){
+    return -1;
+  }
 
   return ano;
 }
