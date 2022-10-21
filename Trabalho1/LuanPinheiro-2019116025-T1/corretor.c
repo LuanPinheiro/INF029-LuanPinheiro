@@ -18,7 +18,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <locale.h>
-#include "LuanPinheiro2019116025.h"
+#include "LuanPinheiro-2019116025-T1.h"
 
 void testSomar();    //função utilizada para testes
 void testFatorial(); //função utilizada para testes

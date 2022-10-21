@@ -24,7 +24,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include "LuanPinheiro2019116025.h"
+#include "LuanPinheiro-2019116025-T1.h"
 #include "extra.h" // Todas as funções extras que serão criadas
 
 /*
