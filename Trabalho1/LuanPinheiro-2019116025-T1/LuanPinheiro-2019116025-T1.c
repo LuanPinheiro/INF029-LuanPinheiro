@@ -358,14 +358,18 @@ int q3(char *texto, char c, int isCaseSensitive)
 int q4(char *strTexto, char *strBusca, int posicoes[30])
 {
     int qtdOcorrencias = 0;
-    int tamanhoBusca = strlen(strBusca);
+    int tamanhoBusca = strlen(strBusca), tamanhoTexto = strlen(strTexto);
     int indexTexto, indexBusca, indexTextoAux, countPosicoes;
+	int strTextoInt[tamanhoTexto], strBuscaInt[tamanhoBusca]; // Terá os valores de strTexto e strBusca em int, é o que será usada na comparação
+
+	tamanhoTexto = transformaCaractereEspecial(strTexto, tamanhoTexto, strTextoInt); // transforma as strings em inteiro
+	tamanhoBusca = transformaCaractereEspecial(strBusca, tamanhoBusca, strBuscaInt);
 
     // For irá percorrer a strTexto
-    for(indexTexto = 0, countPosicoes = 0; strTexto[indexTexto] != '\0'; indexTexto++){
-        if(strTexto[indexTexto] == strBusca[0]){ // Caso a posição atual seja igual ao começo da string de busca, é uma potencial ocorrencia
-            for(indexTextoAux = indexTexto, indexBusca = 0; strBusca[indexBusca] != '\0'; indexBusca++, indexTextoAux++){ // Com uso de uma variavel auxiliar(que ficará com o indice da strTexto), irá continuar a percorrer a strTexto
-                if(strTexto[indexTextoAux] != strBusca[indexBusca]){
+    for(indexTexto = 0, countPosicoes = 0; indexTexto < tamanhoTexto; indexTexto++){
+        if(strTextoInt[indexTexto] == strBuscaInt[0]){ // Caso a posição atual seja igual ao começo da string de busca, é uma potencial ocorrencia
+            for(indexTextoAux = indexTexto, indexBusca = 0; indexBusca < tamanhoBusca; indexBusca++, indexTextoAux++){ // Com uso de uma variavel auxiliar(que ficará com o indice da strTexto), irá continuar a percorrer a strTexto
+                if(strTextoInt[indexTextoAux] != strBuscaInt[indexBusca]){
                     break; // Caso esse recorte da strTexto não seja igual a strBusca o código para aqui
                 }
             }

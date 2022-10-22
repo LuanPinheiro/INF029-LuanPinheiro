@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-//****************** Checa se é uma data válida, inclui validação de ano bissexto
+// Checa se é uma data válida, inclui validação de ano bissexto
 int validarData(int dia, int mes, int ano){
   //Validação de Ano
   if(ano < 0)
@@ -35,7 +35,7 @@ int validarData(int dia, int mes, int ano){
   return true;
 }
 
-//****************** Função que retorna o mês em inteiro dada a string de data
+// Função que retorna o mês em inteiro dada a string de data
 int mesInt (char validNasc[]){
   int identificador=0;
   int mes, str_count=0;
@@ -67,7 +67,7 @@ int mesInt (char validNasc[]){
   return false;
 }
 
-//****************** Função que retorna o dia em inteiro dada a string de data
+// Função que retorna o dia em inteiro dada a string de data
 int diaInt(char validNasc[]){
   int dia, str_count=0;
   
@@ -88,7 +88,7 @@ int diaInt(char validNasc[]){
   return dia;
 }
 
-//****************** Função que retorna o ano em inteiro dada a string de data
+// Função que retorna o ano em inteiro dada a string de data
 int anoInt(char validNasc[]){
   int ano = 0, index, soma, strCount = 0;
   
@@ -106,9 +106,23 @@ int anoInt(char validNasc[]){
   return ano;
 }
 
-//****************** Se houver letras minusculas transformará em maiuscula para padronização do modelo das strings
+// Se houver letras minusculas transformará em maiuscula para padronização do modelo das strings
 void transformMaiusculo(char string[]){
   for(int i=0;string[i]!='\0';i++)
     if(string[i]>=97 && string[i]<=122)
       string[i] -= 32;
+}
+
+// Faz com que os caracteres especiais de uma string se transformem em 1 elemento num array de inteiros, retorna o tamanho do array de inteiros, recebe como parametro a string, o tamanho dela e o array que ficará com os inteiros
+int transformaCaractereEspecial(char string[], int tamanhoString, int stringInt[]){
+	for(int i = 0; i < tamanhoString; i++){
+		if(string[i] == -61){
+			for(int j = i; j < tamanhoString; j++){
+				string[j] = string[j+1];
+			}
+			tamanhoString--;
+		}
+		stringInt[i] = string[i];
+	}
+	return tamanhoString;
 }

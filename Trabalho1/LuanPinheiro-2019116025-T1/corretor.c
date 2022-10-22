@@ -20,8 +20,8 @@
 #include <locale.h>
 #include "LuanPinheiro-2019116025-T1.h"
 
-void testSomar();    //função utilizada para testes
-void testFatorial(); //função utilizada para testes
+//void testSomar();    //função utilizada para testes
+//void testFatorial(); //função utilizada para testes
 void testQ1();
 void testQ2();
 void testQ3();
@@ -31,9 +31,8 @@ void testQ6();
 
 int main()
 {
-    setlocale(LC_ALL, "Portuguese");
-    testSomar();
-    testFatorial();
+    //testSomar();
+    //testFatorial();
     testQ1();
     testQ2();
     testQ3();
