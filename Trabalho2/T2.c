@@ -4,46 +4,28 @@
 #define n 10
 
 typedef struct{
-    int alocados[n]; // Controlará quais vetores ja foram alocados
     int tam[n]; // Controlará o tamanho dos vetores já alocados
     int qtdPreenchidos[n] // Controlará quantos numeros ja foram preenchidos em cada vetor
 }aloc;
 
 void menu();
+void limpaTela();
 aloc insertElemento(int *vetorPrincipal[], aloc controlador);
 
 int main(){
     // Estrutura principal sendo declarada, os vetores de inteiros, que serão dinamicamente alocados dentro do vetorPrincipal
-    int *vet1 = malloc(sizeof(int)),
-    *vet2 = malloc(sizeof(int)),
-    *vet3 = malloc(sizeof(int)),
-    *vet4 = malloc(sizeof(int)),
-    *vet5 = malloc(sizeof(int)),
-    *vet6 = malloc(sizeof(int)),
-    *vet7 = malloc(sizeof(int)),
-    *vet8 = malloc(sizeof(int)),
-    *vet9 = malloc(sizeof(int)),
-    *vet10 = malloc(sizeof(int));
-	int *vetorPrincipal[n] = {vet1, vet2, vet3, vet4, vet5, vet6, vet7, vet8, vet9, vet10};
+    int *vetorPrincipal[n] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     aloc controlador;
     int op;
 
     for(int i = 0; i < n; i++){
-        controlador.alocados[i] = false;
         controlador.qtdPreenchidos[i] = 0;
     }
 
     do{
+		limpaTela();
         printf("Escolha uma opcao\n\n");
         menu();
-        printf("Valores: ");
-        for(int i = 0; i < 5; i++){
-            printf("[%d] ", vet1[i]);
-        }
-        printf("\nEnderecos: ");
-        for(int i = 0; i < 5; i++){
-            printf("[%x] ", vet1[i]);
-        }
         scanf("%d", &op);
         getchar();
 
@@ -59,17 +41,16 @@ int main(){
         }
     }while (op != 7);
 	
-    free(vet1);
-    free(vet2);
-    free(vet3);
-    free(vet4);
-    free(vet5);
-    free(vet6);
-    free(vet7);
-    free(vet8);
-    free(vet9);
-    free(vet10);
-    free(vetorPrincipal);
+    free(vetorPrincipal[0]);
+	free(vetorPrincipal[1]);
+	free(vetorPrincipal[2]);
+	free(vetorPrincipal[3]);
+	free(vetorPrincipal[4]);
+	free(vetorPrincipal[5]);
+	free(vetorPrincipal[6]);
+	free(vetorPrincipal[7]);
+	free(vetorPrincipal[8]);
+	free(vetorPrincipal[9]);
 	return 0;
 }
 
@@ -85,7 +66,6 @@ void menu(){
 
 aloc insertElemento(int *vetorPrincipal[], aloc controlador){
     int valid, op;
-    int *vet;
     do{
         valid = true;
         printf("Escolha uma posicao na estrutura principal\n");
@@ -97,30 +77,39 @@ aloc insertElemento(int *vetorPrincipal[], aloc controlador){
         }
     }while(valid == false);
     op--; // Diminuindo o valor em 1 para ter o index correto do vetorPrincipal
-    vet = *vetorPrincipal[op];
 
-    if(controlador.alocados[op] == false){ // Caso o vetor da posicao indicada nao estiver alocado, primeiro ira alocar
-        do{
+	if(vetorPrincipal[op] == NULL){
+		do{
             printf("Vetor ainda nao alocado, digite o tamanho da estrutura\n");
             scanf("%d", &controlador.tam[op]);
             getchar();
         }while(controlador.tam[op] < 1);
-
-        vet = realloc(*vet, sizeof(int)*controlador.tam[op]);
-        controlador.alocados[op] = true;
-    }
+		vetorPrincipal[0] = malloc(sizeof(int)*controlador.tam[op]);
+	}
 
     if(controlador.qtdPreenchidos[op] == controlador.tam[op]){
-        printf("Limite do vetor atingido\n");
+        printf("Limite do vetor atingido");
+		limpaTela();
     }
     else{
-        vet = *vetorPrincipal[op];
-        printf("ENDERECO: %x\nvet[0]: %x\n", vet, &vet[controlador.qtdPreenchidos[op]]);
         printf("Digite o valor a ser inserido\n");
-        scanf("%d", &vet[controlador.qtdPreenchidos[op]]);
+        scanf("%d", &vetorPrincipal[op][controlador.qtdPreenchidos[op]]);
         getchar();
         controlador.qtdPreenchidos[op]++;
     }
-
+	
     return controlador;
+}
+
+void listarTodos(int *vetorPrincipal[], aloc controlador){
+	limpaTela();
+	for(int indexPrincipal = 0; indexPrincipal < n; indexPrincipal++){
+		
+	}
+}
+
+void limpaTela(){
+	printf("\n\n(APERTE ENTER PARA CONTINUAR)\n");
+	getchar();
+	system("clear");
 }
