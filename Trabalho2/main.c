@@ -20,13 +20,13 @@ int main()
     inicializar();
     testeInserirSemNada();
     testeCriarEstrutura();
-    //testeInserirComEstrutura();
-    //testeExcluir();
-    //testeExcluirNumeroEspecifico();
+    testeInserirComEstrutura();
+    testeExcluir();
+    testeExcluirNumeroEspecifico();
     testeListar();
-    //testeRetornarTodosNumeros();
-    //testeMudarTamanhoEstrutura();
-    //testeListaEncadeada();
+    testeRetornarTodosNumeros();
+    testeMudarTamanhoEstrutura();
+    testeListaEncadeada();
     finalizar();
 }
 int ligado = 1;
@@ -114,9 +114,9 @@ void testeListar()
 
     int vet[2];
 
-    //printf("%d\n", getDadosEstruturaAuxiliar(1, vet) == SEM_ESTRUTURA_AUXILIAR);
-    //printf("%d\n", getDadosEstruturaAuxiliar(11, vet) == POSICAO_INVALIDA);
-    //printf("%d\n", getDadosEstruturaAuxiliar(2, vet) == SUCESSO);
+    printf("%d\n", getDadosEstruturaAuxiliar(1, vet) == SEM_ESTRUTURA_AUXILIAR);
+    printf("%d\n", getDadosEstruturaAuxiliar(11, vet) == POSICAO_INVALIDA);
+    printf("%d\n", getDadosEstruturaAuxiliar(2, vet) == SUCESSO);
 
     printf("%d\n", vet[0] == 7);
     printf("%d\n", vet[1] == -9);

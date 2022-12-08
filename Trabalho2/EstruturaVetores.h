@@ -1,7 +1,14 @@
 #ifndef TRABALHO2_ESTRUTURAVETORES_H
 #define TRABALHO2_ESTRUTURAVETORES_H
 #define TAM 10
-int *vetorPrincipal[TAM];
+
+typedef struct node{
+	int *estruturaAuxiliar;
+	int tamanho;
+	int preenchidos;
+}node;
+
+node vetorPrincipal[TAM];
 
 // enumeracoes (enum) ajudam a deixar o codigo mais legivel, possibilitando que voce de significado
 // as suas constantes, para mais informacoes https://en.cppreference.com/w/c/language/enum
@@ -29,6 +36,11 @@ int getQuantidadeElementosEstruturaAuxiliar(int posicao);
 No *montarListaEncadeadaComCabecote();
 void getDadosListaEncadeadaComCabecote(No *inicio, int vetorAux[]);
 void destruirListaEncadeadaComCabecote(No **inicio);
+
+int ehPosicaoValida(int posicao);
+void shiftEstruturaAuxiliar(int posicao, int posicaoAtual);
+void quicksort(int number[],int first,int last);
+void printaLista(No *inicioLista);
 
 void inicializar();
 void finalizar();
