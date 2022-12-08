@@ -10,6 +10,8 @@ typedef struct node{
 
 node vetorPrincipal[TAM];
 
+int tamLista;
+
 // enumeracoes (enum) ajudam a deixar o codigo mais legivel, possibilitando que voce de significado
 // as suas constantes, para mais informacoes https://en.cppreference.com/w/c/language/enum
 // as constantes do enum em sua inicialização vao representar o numero resultante da soma do valor da
@@ -41,6 +43,7 @@ int ehPosicaoValida(int posicao);
 void shiftEstruturaAuxiliar(int posicao, int posicaoAtual);
 void quicksort(int number[],int first,int last);
 void printaLista(No *inicioLista);
+No* adicionarNodo(No *nodoAnterior, int valor);
 
 void inicializar();
 void finalizar();

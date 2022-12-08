@@ -236,10 +236,12 @@ int getDadosDeTodasEstruturasAuxiliares(int vetorAux[])
         return TODAS_ESTRUTURAS_AUXILIARES_VAZIAS;
     }
     
+    tamLista = 0;
     for(int i = 0, indexAux = 0; i < TAM; i++){
         if(vetorPrincipal[i].preenchidos != 0){
             for(int j = 0; j < vetorPrincipal[i].preenchidos; j++, indexAux++){
                 vetorAux[indexAux] = vetorPrincipal[i].estruturaAuxiliar[j];
+                tamLista++;
             }
         }
     }
@@ -348,21 +350,11 @@ No *montarListaEncadeadaComCabecote()
     }
 
     No *inicio = malloc(sizeof(No));
-    inicio->prox = NULL;
-    inicio->conteudo = vetorAux[0];
-    No *noAnterior = inicio;
-    for(int i = 1; i < 20; i++){
-        No *novoNo = malloc(sizeof(No));
-        if(novoNo){
-            noAnterior->prox = novoNo;
-            novoNo->conteudo = vetorAux[i];
-            novoNo->prox = NULL;
-        }
-        else{
-            return NULL;
-        }
+    No *nodoAnterior = inicio;
+    nodoAnterior->conteudo = vetorAux[0];
+    for(int i = 1; i < tamLista; i++){
+        nodoAnterior = adicionarNodo(nodoAnterior, vetorAux[i]);
     }
-    printaLista(inicio);
     return inicio;
 }
 
@@ -372,6 +364,12 @@ Retorno void
 */
 void getDadosListaEncadeadaComCabecote(No *inicio, int vetorAux[])
 {
+    int index = 0;
+    while(inicio){
+        vetorAux[index] = inicio->conteudo;
+        inicio = inicio->prox;
+        index++;
+    }
 }
 
 /*
@@ -383,6 +381,7 @@ Retorno
 */
 void destruirListaEncadeadaComCabecote(No **inicio)
 {
+    *inicio = NULL;
 }
 
 /*
@@ -460,4 +459,12 @@ void printaLista(No *inicioLista){
         }
         node = node->prox;
     }
+}
+
+No* adicionarNodo(No *nodoAnterior, int valor){
+    No *nodoNovo = malloc(sizeof(No));
+    nodoNovo->conteudo = valor;
+    nodoNovo->prox = NULL;
+    nodoAnterior->prox = nodoNovo;
+    return nodoNovo;
 }
