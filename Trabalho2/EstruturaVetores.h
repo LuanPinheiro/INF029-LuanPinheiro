@@ -44,6 +44,7 @@ void shiftEstruturaAuxiliar(int posicao, int posicaoAtual);
 void quicksort(int number[],int first,int last);
 void printaLista(No *inicioLista);
 No* adicionarNodo(No *nodoAnterior, int valor);
+void liberaLista(node *inicioLista);
 
 void inicializar();
 void finalizar();

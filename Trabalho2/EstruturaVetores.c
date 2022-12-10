@@ -405,7 +405,7 @@ para poder liberar todos os espaços de memória das estruturas auxiliares.
 void finalizar()
 {
     for(int i = 0; i < TAM; i++){
-        free(vetorPrincipal[i].estruturaAuxiliar);
+        liberaLista(vetorPrincipal[i].estruturaAuxiliar);
     }
 }
 
@@ -467,4 +467,19 @@ No* adicionarNodo(No *nodoAnterior, int valor){
     nodoNovo->prox = NULL;
     nodoAnterior->prox = nodoNovo;
     return nodoNovo;
+}
+
+void liberaLista(node *inicioLista){
+    node *nodoAtual = inicioLista;
+    node *proxNodo;
+    
+    while(nodoAtual){
+        proxNodo = nodoAtual->prox;
+        free(nodoAtual);
+        if(proxNodo->prox == NULL){
+            free(proxNodo);
+            break;
+        }
+        nodoAtual = proxNodo;
+    } 
 }
