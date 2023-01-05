@@ -29,13 +29,11 @@ int main()
     testeListaEncadeada();
     finalizar();
 }
-int ligado = 1;
+int ligado = 0;
 void show_log(char *str)
 {
-    if (ligado){
+    if (ligado)
         printf("###%s###\n", str);
-    }
-        
 }
 
 void testeInserirSemNada()
@@ -65,6 +63,7 @@ void testeCriarEstrutura()
 void testeInserirComEstrutura()
 {
     show_log("testeInserirComEstrutura()");
+    //###  int inserirNumeroEmEstrutura(int valor, int posicao); ###
     printf("%d\n", inserirNumeroEmEstrutura(2, 4) == SUCESSO);
     printf("%d\n", inserirNumeroEmEstrutura(2, -2) == SUCESSO);
     printf("%d\n", inserirNumeroEmEstrutura(2, 6) == SUCESSO);
@@ -280,3 +279,4 @@ void testeListaEncadeada()
 
     printf("%d\n", inicio == NULL);
 }
+//gcc mainTeste.c EstruturaVetores.c -o t2
